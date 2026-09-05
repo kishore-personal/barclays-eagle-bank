@@ -5,18 +5,18 @@
 | Stage | Status |
 |---|---|
 | init | COMPLETE |
-| plan | NOT_STARTED |
+| plan | APPROVED |
 | design | NOT_STARTED |
 | tasks | NOT_STARTED |
 | implement-and-test | NOT_STARTED |
 
-**Current stage:** plan
+**Current stage:** design
 
 ## Approval evidence
 
 | Stage | Approval | Evidence summary |
 |---|---|---|
-| plan | Pending | |
+| plan | Explicitly approved | User approved the technical requirements in chat on 2026-09-05, including Q-007 (.NET 10) and the documented defaults for Q-001–Q-006. |
 | design | Pending | |
 | tasks | Pending | |
 
