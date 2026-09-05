@@ -16,6 +16,10 @@ public static class JwtAuthenticationExtensions
         IConfiguration configuration)
     {
         var jwt = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>() ?? new JwtOptions();
+        if (jwt.SigningKey.Length < 32)
+        {
+            throw new InvalidOperationException("JWT signing key is not configured.");
+        }
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

@@ -36,10 +36,9 @@ The Development profile listens on `http://localhost:5080`. Migrations apply on 
 
 ### JWT signing key
 
-Committed `appsettings.json` has an empty `Jwt:SigningKey`. Do not put a real secret in source control.
+Committed `appsettings.json` and `appsettings.Development.json` leave `Jwt:SigningKey` empty. The process will not start without a key of at least 32 characters. Do not commit a real secret.
 
-- **Development:** `appsettings.Development.json` contains a local placeholder so `dotnet run` works on this machine.
-- **Anything else:** set a key of at least 32 characters via environment or user secrets.
+Set one via environment or user secrets before `dotnet run`:
 
 ```bash
 export Jwt__SigningKey='replace-with-a-long-random-secret-key'

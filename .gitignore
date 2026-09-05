@@ -40,6 +40,7 @@ data/
 
 # User secrets leftovers (store is usually outside the repo)
 secrets.json
+*.lic
 
 # IDE
 .idea/

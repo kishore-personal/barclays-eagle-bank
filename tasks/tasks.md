@@ -452,7 +452,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-016 — Final quality pass
 
 - **Priority:** MUST
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** MVP suite is green; no secrets in git; logs stay PII-free; structure still matches SOLID.
 - **Requirement references:** REQ-TEST-001, REQ-TEST-004, REQ-TEST-005, REQ-DEL-003, REQ-NFR-003
 - **Design / ADR references:** ADR-0006, ADR-0007, ADR-0013, ADR-0014, ADR-0015
@@ -460,7 +460,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 - **Implementation scope:** Fix gaps found by running the full test suite; confirm `.gitignore` and no committed JWT secret; confirm Api/Application/Domain/Infrastructure all log and that denylist strings do not appear in test sinks; SOLID review — no fat `*Service` with multiple use cases, no business rules in controllers, no Application/Domain reference to ASP.NET or EF, each implemented use case is its own handler, stretch did not edit MVP handlers except TASK-009’s allowed create-transaction extension; **licence review** — no AutoMapper, MediatR, or other RPL/commercial/key packages in any `.csproj`; no licence key files committed
 - **Test scope:** Re-run the whole suite: xUnit unit tests, Reqnroll features for the implemented slice, and PII log-sink checks; no new product features
 - **Verification / definition of done:** `dotnet test` executed successfully in this environment. Do not claim pass unless that run succeeded.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 108 passed, 0 failed. Removed committed Development JWT placeholder; startup fails if the key is under 32 characters. `.gitignore` covers `data/`, `*.db`, `secrets.json`, `*.lic`. No AutoMapper/MediatR/`*.lic` in the tree. SOLID: one handler per use case; Application/Domain have no ASP.NET or EF references; controllers dispatch only. All four layers have log helpers; Gherkin PII denylist checks remain green.
 
 ---
 

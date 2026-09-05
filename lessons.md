@@ -115,3 +115,13 @@ Do not use this file as a diary. Capture lessons that could help another enginee
 - **Related files/tasks/ADRs:** TASK-004, ADR-0013
 
 ---
+
+### LESSON-011 — A labelled development JWT is still a committed secret
+
+- **Date:** 2026-09-05
+- **Context:** TASK-016 found `DEVELOPMENT-ONLY-…` in committed `appsettings.Development.json`. Tests inject their own key; reviewers can use user-secrets.
+- **Lesson:** REQ-NFR-005 does not exempt a placeholder HMAC key. Once the repo is public, that string is a known signing secret.
+- **Action / convention:** Keep `Jwt:SigningKey` empty in committed files; fail startup if the key is shorter than 32 characters; set it via env or user-secrets.
+- **Related files/tasks/ADRs:** TASK-016, ADR-0005, REQ-NFR-005
+
+---

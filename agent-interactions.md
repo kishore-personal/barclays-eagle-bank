@@ -707,3 +707,27 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 16:57 — barclays-implement-and-test (TASK-016)
+
+- **User intent:** Run the final quality pass (TASK-016) rather than continuing lists/PATCH/DELETE.
+- **Agent actions actually performed:**
+  - Re-ran the full suite; reviewed SOLID (one handler per use case; no fat services; Application/Domain have no ASP.NET/EF references), licences (no AutoMapper/MediatR/`*.lic`), and four-layer logging plus PII denylist checks.
+  - Removed the committed Development JWT placeholder; startup now fails if `Jwt:SigningKey` is under 32 characters. Added `*.lic` to `.gitignore`.
+- **Decisions / outcomes:**
+  - TASK-016 marked `DONE`. All MUST tasks are done. Remaining SHOULD/COULD: TASK-010–TASK-015.
+  - implement-and-test set to `COMPLETE` for the chosen slice (MVP + withdrawal + quality pass).
+- **Files changed:**
+  - `src/EagleBank.Api/appsettings.Development.json`
+  - `src/EagleBank.Api/Authentication/JwtAuthenticationExtensions.cs`
+  - `.gitignore`
+  - `README.md`
+  - `lessons.md`
+  - `tasks/tasks.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln` — 108 passed, 0 failed. `git ls-files '*.lic'` — none.
+- **Workflow transition:** implement-and-test `IN_PROGRESS` → `COMPLETE`
+- **Approval state:** not required; quality pass of approved tasks
+
+---
+
