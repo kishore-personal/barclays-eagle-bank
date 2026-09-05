@@ -620,3 +620,25 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 14:34 — barclays-implement-and-test (TASK-006)
+
+- **User intent:** Continue one approved task at a time; implement create and fetch account.
+- **Agent actions actually performed:**
+  - Added `CreateAccountCommand` / `GetAccountQuery` handlers and `POST /v1/accounts`, `GET /v1/accounts/{accountNumber}`.
+  - Account numbers are `01` + 6 digits with unique-index retry; owner comes from JWT; `sortCode` `10-10-10`, GBP, balance `0.00`.
+  - Reused `ResourceOwnership` for 403/404; added `Features/Accounts.feature`.
+- **Decisions / outcomes:**
+  - TASK-006 marked `DONE`. TASK-007 not started (one-task increment).
+- **Files changed:**
+  - `src/EagleBank.Api` (AccountsController, CallerUser)
+  - `src/EagleBank.Application` (CreateAccount, GetAccount)
+  - `src/EagleBank.Infrastructure` (AccountStore, AccountNumberFactory)
+  - `tests/EagleBank.Tests` (Accounts.feature, steps)
+  - `tasks/tasks.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln` — 66 passed, 0 failed.
+- **Workflow transition:** none; implement-and-test remains `IN_PROGRESS`
+- **Approval state:** implementing approved tasks only
+
+---
+

@@ -277,7 +277,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-006 — Create and fetch account
 
 - **Priority:** MUST
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Owner can create an account and fetch it by `accountNumber`.
 - **Requirement references:** REQ-ACCOUNT-001–005, REQ-ACCOUNT-007–009, REQ-ACCOUNT-012, REQ-API-008
 - **Design / ADR references:** ADR-0002, ADR-0008, ADR-0013, ADR-0014; path is `{accountNumber}` not `{accountId}`
@@ -292,7 +292,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
   - SOLID: create and get are separate handlers; controller actions inject only the one they dispatch
 - **Test scope:** **Gherkin `Features/Accounts.feature`:** create with required data → 201 + fetch own by `accountNumber` → 200; missing fields or bad `accountType` → 400; create without JWT → 401; fetch without JWT → 401; fetch another user's account → 403; fetch unknown number → 404; bad `accountNumber` pattern → 400; sink has no account number or name
 - **Verification / definition of done:** `dotnet test` passes for those scenarios.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 66 passed, 0 failed (create+fetch 201/200, missing/bad type 400, create/fetch 401, other owner 403, unknown 404, bad `accountNumber` 400, plus prior tests).
 
 ---
 

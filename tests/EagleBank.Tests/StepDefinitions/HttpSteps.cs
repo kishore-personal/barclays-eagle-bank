@@ -19,11 +19,6 @@ public sealed class HttpSteps
         Client.DefaultRequestHeaders.Authorization = null;
     }
 
-    [Given("I have a personal bank account")]
-    public void GivenIHaveAPersonalBankAccount()
-    {
-    }
-
     [Given("that account has a balance of {decimal}")]
     public void GivenThatAccountHasABalanceOf(decimal balance)
     {
@@ -72,6 +67,14 @@ public sealed class HttpSteps
         foreach (var banned in LogDenylist.Values)
         {
             Assert.DoesNotContain(banned, combined, StringComparison.OrdinalIgnoreCase);
+        }
+
+        foreach (var key in new[] { "CreatedAccountNumber", "OtherAccountNumber" })
+        {
+            if (_scenarioContext.TryGetValue<string>(key, out var accountNumber))
+            {
+                Assert.DoesNotContain(accountNumber, combined, StringComparison.OrdinalIgnoreCase);
+            }
         }
     }
 

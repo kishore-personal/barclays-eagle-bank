@@ -1,8 +1,6 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using EagleBank.Api.Authentication;
 using EagleBank.Application.Users.CreateUser;
 using EagleBank.Application.Users.GetUser;
-using EagleBank.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,14 +33,9 @@ public sealed class UsersController : ControllerBase
     [HttpGet("{userId}")]
     public async Task<IActionResult> GetUser(string userId, CancellationToken cancellationToken)
     {
-        var callerUserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
-            ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrWhiteSpace(callerUserId))
-        {
-            throw new UnauthorizedException();
-        }
-
-        var response = await _getUser.HandleAsync(new GetUserQuery(userId, callerUserId), cancellationToken);
+        var response = await _getUser.HandleAsync(
+            new GetUserQuery(userId, CallerUser.RequireId(User)),
+            cancellationToken);
         return Ok(response);
     }
 }

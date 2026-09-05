@@ -25,6 +25,8 @@ public static class DependencyInjection
                 warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         });
         services.AddScoped<IUserStore, UserStore>();
+        services.AddScoped<IAccountStore, AccountStore>();
+        services.AddSingleton<AccountNumberFactory>();
         services.AddSingleton<IPasswordHasher, AspNetPasswordHasher>();
         services.AddSingleton<IUserIdFactory, UserIdFactory>();
         services.AddSingleton<IJwtTokenIssuer, JwtTokenIssuer>();

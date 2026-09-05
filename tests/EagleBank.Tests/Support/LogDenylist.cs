@@ -14,6 +14,7 @@ public static class LogDenylist
         UserFixtures.Password,
         UserFixtures.Line1,
         UserFixtures.Name,
+        AccountFixtures.Name,
         "unknown@example.com",
         "eyJ"
     ];
