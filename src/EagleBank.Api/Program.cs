@@ -1,4 +1,5 @@
 using System.Text.Json;
+using EagleBank.Api.Authentication;
 using EagleBank.Api.ExceptionHandling;
 using EagleBank.Api.Middleware;
 using EagleBank.Api.Validation;
@@ -21,6 +22,7 @@ builder.Services.AddExceptionHandler<EagleBankExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddEagleBankAuthentication(builder.Configuration);
 
 var app = builder.Build();
 
@@ -36,6 +38,8 @@ if (app.Environment.IsDevelopment()
 app.UseMiddleware<RequestContextMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseExceptionHandler();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 

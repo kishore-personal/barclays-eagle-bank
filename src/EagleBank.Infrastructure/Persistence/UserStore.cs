@@ -21,6 +21,11 @@ public sealed class UserStore : IUserStore
         return _db.Users.AsNoTracking().SingleOrDefaultAsync(user => user.Email == email, cancellationToken);
     }
 
+    public Task<User?> GetByIdAsync(string userId, CancellationToken cancellationToken)
+    {
+        return _db.Users.AsNoTracking().SingleOrDefaultAsync(user => user.Id == userId, cancellationToken);
+    }
+
     public async Task AddAsync(User user, CancellationToken cancellationToken)
     {
         _db.Users.Add(user);

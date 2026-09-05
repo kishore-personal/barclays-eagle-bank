@@ -597,3 +597,26 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 14:00 — barclays-implement-and-test (TASK-005)
+
+- **User intent:** Continue one approved task at a time; implement authenticated fetch user.
+- **Agent actions actually performed:**
+  - Added JWT bearer authentication; create-user and login remain anonymous.
+  - Added `GetUserQuery` / handler and shared `ResourceOwnership` helper (missing → 404, other owner → 403).
+  - `GET /v1/users/{userId}`: missing/invalid token → 401; bad id pattern → 400.
+  - Extended `Users.feature` with owner 200, 401, 403, 404, and 400 scenarios.
+- **Decisions / outcomes:**
+  - TASK-005 marked `DONE`. TASK-006 not started (one-task increment).
+- **Files changed:**
+  - `src/EagleBank.Api` (JWT auth, GET user)
+  - `src/EagleBank.Application` (GetUser, ResourceOwnership)
+  - `src/EagleBank.Infrastructure` (`IUserStore.GetByIdAsync`)
+  - `tests/EagleBank.Tests` (Users.feature, steps, ownership unit tests)
+  - `tasks/tasks.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln` — 52 passed, 0 failed.
+- **Workflow transition:** none; implement-and-test remains `IN_PROGRESS`
+- **Approval state:** implementing approved tasks only
+
+---
+

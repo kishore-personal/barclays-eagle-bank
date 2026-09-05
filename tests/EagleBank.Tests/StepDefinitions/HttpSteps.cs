@@ -1,5 +1,3 @@
-using System.Net.Http.Headers;
-using System.Text;
 using EagleBank.Tests.Support;
 using Reqnroll;
 
@@ -19,17 +17,6 @@ public sealed class HttpSteps
     public void GivenIAmNotAuthenticated()
     {
         Client.DefaultRequestHeaders.Authorization = null;
-    }
-
-    [Given("I am authenticated as a registered user")]
-    public void GivenIAmAuthenticatedAsARegisteredUser()
-    {
-        Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "pending-task-004");
-    }
-
-    [Given("another registered user exists")]
-    public void GivenAnotherRegisteredUserExists()
-    {
     }
 
     [Given("I have a personal bank account")]

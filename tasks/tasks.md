@@ -257,7 +257,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-005 — Fetch user
 
 - **Priority:** MUST
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Authenticated `GET /v1/users/{userId}` with 401/403/404.
 - **Requirement references:** REQ-USER-006–008, REQ-USER-016, REQ-AUTH-003, REQ-AUTH-006–007
 - **Design / ADR references:** ADR-0005, ADR-0008, ADR-0013, ADR-0014; ownership helper
@@ -270,7 +270,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
   - SOLID: new query type only; inject `GetUserQuery` handler; reuse the ownership helper (ISP/SRP)
 - **Test scope:** **Gherkin `Features/Users.feature`:** authenticated owner fetches own user → 200; unauthenticated → 401; other existing user → 403; unknown id → 404; bad `userId` pattern → 400; sink has no email/name
 - **Verification / definition of done:** `dotnet test` passes for those scenarios.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 52 passed, 0 failed (owner 200, unauthenticated 401, other user 403, unknown 404, bad `userId` 400, plus prior tests).
 
 ---
 

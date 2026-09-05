@@ -8,6 +8,8 @@ public static class LogDenylist
         "Authorization",
         "Bearer ",
         UserFixtures.Email,
+        UserFixtures.OtherEmail,
+        UserFixtures.OtherName,
         UserFixtures.Phone,
         UserFixtures.Password,
         UserFixtures.Line1,

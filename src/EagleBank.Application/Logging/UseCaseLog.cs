@@ -9,6 +9,11 @@ public static class UseCaseLog
         logger.LogInformation("Use case started {UseCase}", useCase);
     }
 
+    public static void Started(ILogger logger, string useCase, string userId)
+    {
+        logger.LogInformation("Use case started {UseCase} {UserId}", useCase, userId);
+    }
+
     public static void Completed(ILogger logger, string useCase, string resultCode)
     {
         logger.LogInformation("Use case completed {UseCase} {ResultCode}", useCase, resultCode);

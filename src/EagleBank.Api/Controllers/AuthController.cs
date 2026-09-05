@@ -1,9 +1,11 @@
 using EagleBank.Application.Auth.Login;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EagleBank.Api.Controllers;
 
 [ApiController]
+[AllowAnonymous]
 [Route("v1/auth")]
 public sealed class AuthController : ControllerBase
 {
