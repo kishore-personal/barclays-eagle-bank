@@ -1,5 +1,3 @@
-using System.Security.Claims;
-
 namespace EagleBank.Api.Middleware;
 
 public sealed class RequestContextMiddleware
@@ -26,14 +24,7 @@ public sealed class RequestContextMiddleware
 
         context.Items[RequestIdItemKey] = requestId;
 
-        var scope = new Dictionary<string, object?> { ["RequestId"] = requestId };
-        var userId = context.User.FindFirstValue("sub") ?? context.User.FindFirstValue("userId");
-        if (!string.IsNullOrWhiteSpace(userId) && userId.StartsWith("usr-", StringComparison.Ordinal))
-        {
-            scope["userId"] = userId;
-        }
-
-        using (_logger.BeginScope(scope))
+        using (_logger.BeginScope(new Dictionary<string, object?> { ["RequestId"] = requestId }))
         {
             context.Response.OnStarting(() =>
             {

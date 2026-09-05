@@ -1,10 +1,19 @@
 using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using Microsoft.Extensions.Logging;
 
 namespace EagleBank.Tests.Support;
 
 public sealed class TestLogSink : ILoggerProvider
 {
+    private static readonly HashSet<string> AllowedScopeKeys = new(StringComparer.Ordinal)
+    {
+        "RequestId",
+        "userId"
+    };
+
+    private readonly AsyncLocal<ImmutableList<string>> _scopes = new();
+
     public ConcurrentQueue<string> Entries { get; } = new();
 
     public ILogger CreateLogger(string categoryName) => new SinkLogger(this, categoryName);
@@ -12,6 +21,18 @@ public sealed class TestLogSink : ILoggerProvider
     public void Dispose()
     {
     }
+
+    internal IDisposable PushScope(string text)
+    {
+        var previous = _scopes.Value ?? ImmutableList<string>.Empty;
+        _scopes.Value = previous.Add(text);
+        return new PopScope(() => _scopes.Value = previous);
+    }
+
+    internal string CurrentScopeText =>
+        _scopes.Value is { Count: > 0 } scopes
+            ? string.Join(" ", scopes)
+            : string.Empty;
 
     private sealed class SinkLogger : ILogger
     {
@@ -27,7 +48,10 @@ public sealed class TestLogSink : ILoggerProvider
         public IDisposable BeginScope<TState>(TState state)
             where TState : notnull
         {
-            return NullScope.Instance;
+            var text = FormatAllowedScope(state);
+            return string.IsNullOrEmpty(text)
+                ? NullScope.Instance
+                : _sink.PushScope(text);
         }
 
         public bool IsEnabled(LogLevel logLevel) => true;
@@ -40,7 +64,23 @@ public sealed class TestLogSink : ILoggerProvider
             Func<TState, Exception?, string> formatter)
         {
             var message = formatter(state, exception);
-            _sink.Entries.Enqueue($"{logLevel} {_categoryName} {message}");
+            var scope = _sink.CurrentScopeText;
+            var scopePrefix = string.IsNullOrEmpty(scope) ? string.Empty : $" [{scope}]";
+            _sink.Entries.Enqueue($"{logLevel} {_categoryName}{scopePrefix} {message}");
+        }
+
+        private static string FormatAllowedScope<TState>(TState state)
+        {
+            if (state is not IEnumerable<KeyValuePair<string, object?>> pairs)
+            {
+                return string.Empty;
+            }
+
+            return string.Join(
+                " ",
+                pairs
+                    .Where(pair => AllowedScopeKeys.Contains(pair.Key) && pair.Value is not null)
+                    .Select(pair => $"{pair.Key}={pair.Value}"));
         }
     }
 
@@ -51,5 +91,17 @@ public sealed class TestLogSink : ILoggerProvider
         public void Dispose()
         {
         }
+    }
+
+    private sealed class PopScope : IDisposable
+    {
+        private readonly Action _pop;
+
+        public PopScope(Action pop)
+        {
+            _pop = pop;
+        }
+
+        public void Dispose() => _pop();
     }
 }

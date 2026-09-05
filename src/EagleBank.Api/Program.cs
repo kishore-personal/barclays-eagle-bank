@@ -37,6 +37,8 @@ if (app.Environment.IsDevelopment()
 }
 
 app.UseMiddleware<RequestContextMiddleware>();
+app.UseAuthentication();
+app.UseMiddleware<AuthenticatedUserScopeMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseExceptionHandler();
 app.UseSwaggerUI(options =>
@@ -44,8 +46,8 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = "swagger";
     options.DocumentTitle = "Eagle Bank";
     options.SwaggerEndpoint(SubmittedOpenApi.DocumentPath, "Eagle Bank");
+    options.HeadContent = SubmittedOpenApi.UiImplementedOpsBanner;
 });
-app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));

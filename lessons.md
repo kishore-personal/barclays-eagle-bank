@@ -125,3 +125,23 @@ Do not use this file as a diary. Capture lessons that could help another enginee
 - **Related files/tasks/ADRs:** TASK-016, ADR-0005, REQ-NFR-005
 
 ---
+
+### LESSON-012 — Middleware that reads `HttpContext.User` must run after authentication
+
+- **Date:** 2026-09-05
+- **Context:** Code review found `RequestContextMiddleware` registered before `UseAuthentication`, so `BeginScope` never received `userId` even though handlers log it.
+- **Lesson:** A request-scope dictionary built at the edge sees an empty principal. ADR-0007 “after authentication, include `userId`” only works if that middleware (or a second scope push) runs after the JWT is applied.
+- **Action / convention:** Place correlation middleware that reads claims after `UseAuthentication`, or push `userId` in a later middleware. Keep `RequestId` generation at the true edge if needed.
+- **Related files/tasks/ADRs:** ADR-0007, `Program.cs`, `RequestContextMiddleware.cs`, `reviews/code-review.md`
+
+---
+
+### LESSON-013 — A test log sink that records every `BeginScope` will capture raw URLs
+
+- **Date:** 2026-09-05
+- **Context:** After adding scope capture to prove `userId` is in the request scope, Reqnroll PII checks failed because ASP.NET’s default scope includes `RequestPath=/v1/accounts/01……`.
+- **Lesson:** Framework request scopes embed path parameters. Dumping every scope into the test sink reintroduces the identifiers ADR-0007 told us not to log.
+- **Action / convention:** When asserting correlation scopes, record only allow-listed keys (`RequestId`, `userId`). Ignore `RequestPath` and other framework pairs.
+- **Related files/tasks/ADRs:** ADR-0007, `TestLogSink.cs`, TASK-013 follow-up
+
+---

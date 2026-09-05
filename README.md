@@ -23,30 +23,24 @@ dotnet test EagleBank.sln
 
 That runs both suites in `tests/EagleBank.Tests`:
 
-- **xUnit** units (`Money`, exception mapping, ownership, account-number format, domain apply)
+- **xUnit** units (`Money`, exception mapping, ownership, account-number format, domain apply, concurrent withdrawal)
 - **Reqnroll** HTTP acceptance (`Features/*.feature`) against `WebApplicationFactory` with an isolated SQLite file per scenario
 
 ## Run the API
 
-```bash
-dotnet run --project src/EagleBank.Api
-```
-
-The Development profile listens on `http://localhost:5080`. Migrations apply on startup. Check `GET /health`.
-
-Swagger UI is at [http://localhost:5080/swagger](http://localhost:5080/swagger). It loads the submitted [`openapi.yaml`](openapi.yaml) (including login), not a generated spec. The raw file is also at `GET /openapi.yaml`.
-
-### JWT signing key
-
-Committed `appsettings.json` and `appsettings.Development.json` leave `Jwt:SigningKey` empty. The process will not start without a key of at least 32 characters. Do not commit a real secret.
-
-Set one via environment or user secrets before `dotnet run`:
+Committed `appsettings.json` and `appsettings.Development.json` leave `Jwt:SigningKey` empty. Startup fails unless the key is at least 32 characters. Do not commit a real secret.
 
 ```bash
 export Jwt__SigningKey='replace-with-a-long-random-secret-key'
-# or
-dotnet user-secrets set "Jwt:SigningKey" "replace-with-a-long-random-secret-key" --project src/EagleBank.Api
+export ASPNETCORE_ENVIRONMENT=Development
+dotnet run --project src/EagleBank.Api
 ```
+
+Alternatively: `dotnet user-secrets set "Jwt:SigningKey" "replace-with-a-long-random-secret-key" --project src/EagleBank.Api`.
+
+The Development profile listens on `http://localhost:5080`. Migrations apply on startup. Check `GET /health`.
+
+Swagger UI is at [http://localhost:5080/swagger](http://localhost:5080/swagger). It loads the submitted [`openapi.yaml`](openapi.yaml) (including login), not a generated spec. The raw file is also at `GET /openapi.yaml`. The UI banner and the spec description list which operations are wired in this repository.
 
 Tokens last 60 minutes. `sub` is the `userId`.
 
@@ -110,20 +104,29 @@ Then `POST /v1/accounts` with `{ "name", "accountType": "personal" }`, and depos
 
 ## What is implemented
 
-| Area | Behaviour |
-|---|---|
-| User | Public create; authenticated fetch of own user (`403` / `404` as specified) |
-| Auth | `POST /v1/auth/login` → JWT |
-| Account | Create and fetch by `accountNumber` (`^01\d{6}$`) |
-| Transaction | Deposit and withdrawal; fetch by id on the owning account; deposit over `10000.00` or insufficient funds → `422` |
-| Money | GBP, two decimals, persisted as integer pence |
-| Errors | Typed exceptions → OpenAPI error bodies; FluentValidation → `400` + `details` |
+The submitted `openapi.yaml` describes the full original contract. Only the operations below are wired. List, PATCH, and DELETE return `404`/`405` if called. Swagger UI shows the same split at the top of the page.
 
-List, PATCH, and DELETE are designed but not part of this MVP. Withdrawal uses the same create-transaction handler (`type=withdrawal`).
+| Method | Path | Wired |
+|---|---|---|
+| POST | `/v1/users` | Yes — public create |
+| GET | `/v1/users/{userId}` | Yes — own user (`403` / `404`) |
+| PATCH | `/v1/users/{userId}` | No |
+| DELETE | `/v1/users/{userId}` | No |
+| POST | `/v1/auth/login` | Yes — `{ "token" }` |
+| POST | `/v1/accounts` | Yes |
+| GET | `/v1/accounts` | No |
+| GET | `/v1/accounts/{accountNumber}` | Yes (`^01\d{6}$`) |
+| PATCH | `/v1/accounts/{accountNumber}` | No |
+| DELETE | `/v1/accounts/{accountNumber}` | No |
+| POST | `/v1/accounts/{accountNumber}/transactions` | Yes — deposit and withdrawal |
+| GET | `/v1/accounts/{accountNumber}/transactions` | No |
+| GET | `/v1/accounts/{accountNumber}/transactions/{transactionId}` | Yes |
+
+Deposit over `10000.00` or a withdrawal with insufficient funds returns `422`. Money is GBP, two decimals, persisted as integer pence. Errors use the OpenAPI bodies (`400` includes `details`).
 
 ## Logging
 
-Logs are structured across API, application, domain, and persistence. Correlate with `RequestId` (`X-Request-Id` header or generated). After login, application logs may include `userId` (`usr-…`) only.
+Logs are structured across API, application, domain, and persistence. Correlate with `RequestId` (`X-Request-Id` header or generated). After authentication, the request log scope includes `userId` (`usr-…`) only.
 
 Logs must not contain email, name, phone, address, password, JWT, request bodies, transaction `reference`, account display name, or the full `accountNumber`. EF sensitive-data logging is off.
 

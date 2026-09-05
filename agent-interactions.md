@@ -753,3 +753,48 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 17:50 — barclays-code-review
+
+- **User intent:** Independent review of the completed implement-and-test slice.
+- **Agent actions actually performed:**
+  - Confirmed plan/design/tasks APPROVED and implement-and-test COMPLETE.
+  - Inspected requirements, design, tasks, ADRs, OpenAPI, source, tests, README, and committed JWT config.
+  - Did not change production code.
+- **Decisions / outcomes:**
+  - Review outcome **PASS_WITH_OBSERVATIONS**.
+  - No CRITICAL/HIGH/MEDIUM findings. LOW: request-scope `userId` never set (middleware before auth); README first run command omits JWT env; validation `details.field` casing mixed.
+  - Observations: stretch list/PATCH/DELETE advertised in Swagger but not implemented; TASK-013 concurrency test missing though conditional UPDATE exists.
+- **Files changed:**
+  - `reviews/code-review.md`
+  - `.barclays/workflow-state.md`
+  - `lessons.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln --nologo` — 110 passed, 0 failed.
+- **Workflow transition:** implement-and-test remains `COMPLETE`; review `COMPLETE`; current stage `review`
+- **Approval state:** review does not require user approval; implementation approvals unchanged
+
+---
+
+### 2026-09-05 17:56 — review follow-ups (items 1–4)
+
+- **User intent:** Implement the four optional items listed in `reviews/code-review.md` (middleware `userId` scope, README JWT snippet, TASK-013, document wired OpenAPI operations).
+- **Agent actions actually performed:**
+  - Added `AuthenticatedUserScopeMiddleware` after `UseAuthentication`; `RequestContextMiddleware` now sets `RequestId` only.
+  - Folded `Jwt__SigningKey` into the first README run snippet; added a wired-vs-not operations table.
+  - Noted implemented vs unwired operations in `openapi.yaml` and a Swagger UI banner.
+  - Added `ConcurrentWithdrawalTests` (TASK-013). Test log sink records only `RequestId` / `userId` scopes so ASP.NET `RequestPath` is not treated as a log line.
+- **Decisions / outcomes:**
+  - TASK-013 marked `DONE`. Remaining SHOULD/COULD: TASK-010–012, TASK-014.
+  - Review outcome left as PASS_WITH_OBSERVATIONS; follow-up noted on the review file.
+- **Files changed:**
+  - `src/EagleBank.Api` (Program, middleware, SubmittedOpenApi)
+  - `openapi.yaml`, `README.md`
+  - `tests/EagleBank.Tests` (TestLogSink, HostSmokeTests, ConcurrentWithdrawalTests)
+  - `tasks/tasks.md`, `reviews/code-review.md`, `lessons.md`
+  - `.barclays/workflow-state.md`, `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln --nologo` — 112 passed, 0 failed.
+- **Workflow transition:** implement-and-test briefly `IN_PROGRESS` → `COMPLETE`; current stage `review`
+- **Approval state:** implementing approved TASK-013 plus user-requested review follow-ups
+
+---
+

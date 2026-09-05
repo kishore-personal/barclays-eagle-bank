@@ -407,7 +407,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-013 — Concurrent withdrawal safety test
 
 - **Priority:** COULD
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Prove two parallel withdrawals cannot overdraw.
 - **Requirement references:** REQ-TXN-016
 - **Design / ADR references:** ADR-0004, ADR-0013
@@ -415,7 +415,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 - **Implementation scope:** No product change unless the test reveals a bug
 - **Test scope:** **Unit/integration xUnit (not Gherkin):** two concurrent withdrawals of the full balance; one succeeds, one 422; final balance ≥ 0 and at most one debit of that amount
 - **Verification / definition of done:** That test is in the suite and `dotnet test` passes.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 112 passed, 0 failed. `ConcurrentWithdrawalTests` two parallel full-balance withdrawals → one `201`, one `422`, remaining balance `0.00`.
 
 ---
 

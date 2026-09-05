@@ -1,3 +1,6 @@
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.Json;
 using EagleBank.Tests.Support;
 
 namespace EagleBank.Tests.Unit;
@@ -50,6 +53,8 @@ public class HostSmokeTests : IClassFixture<ApiWebApplicationFactory>
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.Contains("/v1/auth/login", body);
         Assert.Contains("password", body);
+        Assert.Contains("Implemented in this repository", body);
+        Assert.Contains("not wired", body, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("swagger/v1/swagger.json", body);
     }
 
@@ -63,5 +68,51 @@ public class HostSmokeTests : IClassFixture<ApiWebApplicationFactory>
 
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.Contains("swagger-ui", body, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Wired in this repository", body);
+        Assert.Contains("not wired", body, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task Authenticated_request_log_scope_includes_user_id()
+    {
+        var client = _factory.CreateClient();
+        var create = await client.PostAsync("/v1/users", UserFixtures.JsonBody(new
+        {
+            name = "Scope User",
+            address = new
+            {
+                line1 = "1 Scope Road",
+                town = "London",
+                county = "Greater London",
+                postcode = "SW1A 1AA"
+            },
+            phoneNumber = "+441111111111",
+            email = "scope-user@example.com",
+            password = "S3cretPass!"
+        }));
+        create.EnsureSuccessStatusCode();
+        using var created = JsonDocument.Parse(await create.Content.ReadAsStringAsync());
+        var userId = created.RootElement.GetProperty("id").GetString()!;
+
+        var login = await client.PostAsJsonAsync(
+            "/v1/auth/login",
+            new { email = "scope-user@example.com", password = "S3cretPass!" },
+            UserFixtures.JsonOptions);
+        login.EnsureSuccessStatusCode();
+        using var tokenDoc = JsonDocument.Parse(await login.Content.ReadAsStringAsync());
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", tokenDoc.RootElement.GetProperty("token").GetString());
+
+        var response = await client.GetAsync($"/v1/users/{userId}");
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+
+        var completed = _factory.LogSink.Entries.FirstOrDefault(entry =>
+            entry.Contains("HTTP request completed", StringComparison.Ordinal)
+            && entry.Contains("GET", StringComparison.Ordinal)
+            && entry.Contains("users/{userId}", StringComparison.Ordinal));
+
+        Assert.False(string.IsNullOrWhiteSpace(completed));
+        Assert.Contains($"userId={userId}", completed);
+        Assert.Contains("RequestId=", completed);
     }
 }
