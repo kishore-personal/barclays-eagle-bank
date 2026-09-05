@@ -26,6 +26,13 @@ public sealed class AccountSteps
         _scenarioContext.Set(accountNumber, "CreatedAccountNumber");
     }
 
+    [Given("I have a second personal bank account")]
+    public async Task GivenIHaveASecondPersonalBankAccount()
+    {
+        var accountNumber = await CreateAccountAsync();
+        _scenarioContext.Set(accountNumber, "SecondAccountNumber");
+    }
+
     [Given("the other user has a personal bank account")]
     public async Task GivenTheOtherUserHasAPersonalBankAccount()
     {

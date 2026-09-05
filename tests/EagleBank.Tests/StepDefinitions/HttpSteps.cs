@@ -19,12 +19,6 @@ public sealed class HttpSteps
         Client.DefaultRequestHeaders.Authorization = null;
     }
 
-    [Given("that account has a balance of {decimal}")]
-    public void GivenThatAccountHasABalanceOf(decimal balance)
-    {
-        _scenarioContext.Set(balance, "ExpectedBalance");
-    }
-
     [When("I send a {word} request to {string}")]
     public async Task WhenISendARequestTo(string method, string path)
     {
@@ -56,7 +50,8 @@ public sealed class HttpSteps
     [Then("the account balance is {decimal}")]
     public void ThenTheAccountBalanceIs(decimal balance)
     {
-        _scenarioContext.Set(balance, "AssertedBalance");
+        using var document = System.Text.Json.JsonDocument.Parse(_scenarioContext.Get<string>("ResponseBody"));
+        Assert.Equal(balance, document.RootElement.GetProperty("balance").GetDecimal());
     }
 
     [Then("the test log sink contains no denylist PII")]
@@ -69,7 +64,7 @@ public sealed class HttpSteps
             Assert.DoesNotContain(banned, combined, StringComparison.OrdinalIgnoreCase);
         }
 
-        foreach (var key in new[] { "CreatedAccountNumber", "OtherAccountNumber" })
+        foreach (var key in new[] { "CreatedAccountNumber", "OtherAccountNumber", "SecondAccountNumber" })
         {
             if (_scenarioContext.TryGetValue<string>(key, out var accountNumber))
             {

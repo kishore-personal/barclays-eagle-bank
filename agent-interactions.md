@@ -642,3 +642,28 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 14:53 — barclays-implement-and-test (TASK-007)
+
+- **User intent:** Continue one approved task at a time; implement deposit and fetch transaction.
+- **Agent actions actually performed:**
+  - Added `CreateTransaction` / `GetTransaction` handlers and `POST/GET .../transactions`.
+  - Deposit applies `BankAccount.Apply` then a conditional `UPDATE` in one DB transaction (ADR-0004); cap breach is 422 with no leftover row.
+  - Fetch authorises the account first; unknown or wrong-account `transactionId` is 404.
+  - OpenAPI `transactionId` pattern updated to `^tan-[A-Za-z0-9]+$` (Q-003).
+- **Decisions / outcomes:**
+  - TASK-007 marked `DONE`. Withdrawal SQL/domain branch exists but is not Gherkin-covered (TASK-009). TASK-008 not started.
+- **Files changed:**
+  - `src/EagleBank.Domain` (`BankAccount.Apply`)
+  - `src/EagleBank.Application` (CreateTransaction, GetTransaction)
+  - `src/EagleBank.Infrastructure` (TransactionStore, TransactionIdFactory)
+  - `src/EagleBank.Api` (TransactionsController)
+  - `tests/EagleBank.Tests` (Transactions.feature, apply unit tests)
+  - `openapi.yaml`
+  - `tasks/tasks.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln` — 90 passed, 0 failed.
+- **Workflow transition:** none; implement-and-test remains `IN_PROGRESS`
+- **Approval state:** implementing approved tasks only
+
+---
+

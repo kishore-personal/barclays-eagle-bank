@@ -1,3 +1,5 @@
+using EagleBank.Domain.Exceptions;
+
 namespace EagleBank.Domain;
 
 public sealed class BankAccount
@@ -46,5 +48,36 @@ public sealed class BankAccount
         Balance = Money.Zero;
         CreatedTimestamp = createdTimestamp;
         UpdatedTimestamp = createdTimestamp;
+    }
+
+    public void Apply(Transaction transaction)
+    {
+        if (!string.Equals(transaction.AccountNumber, AccountNumber, StringComparison.Ordinal))
+        {
+            throw new InvalidOperationException("Transaction does not belong to this account.");
+        }
+
+        if (transaction.Type == TransactionType.Deposit)
+        {
+            var next = Balance.Pence + transaction.Amount.Pence;
+            if (next > Money.MaxPence)
+            {
+                throw new BalanceCapException();
+            }
+
+            Balance = Money.FromPence(next);
+        }
+        else
+        {
+            if (transaction.Amount.Pence > Balance.Pence)
+            {
+                throw new InsufficientFundsException();
+            }
+
+            Balance = Money.FromPence(Balance.Pence - transaction.Amount.Pence);
+        }
+
+        UpdatedTimestamp = transaction.CreatedTimestamp;
+        Transactions.Add(transaction);
     }
 }

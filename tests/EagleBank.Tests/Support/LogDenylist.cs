@@ -15,6 +15,11 @@ public static class LogDenylist
         UserFixtures.Line1,
         UserFixtures.Name,
         AccountFixtures.Name,
+        TransactionFixtures.Reference,
+        TransactionFixtures.DepositAmountText,
+        TransactionFixtures.InvalidAmountText,
+        TransactionFixtures.CapAmountText,
+        TransactionFixtures.OverCapAmountText,
         "unknown@example.com",
         "eyJ"
     ];

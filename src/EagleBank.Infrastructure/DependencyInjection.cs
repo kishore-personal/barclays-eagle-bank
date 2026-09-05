@@ -26,9 +26,11 @@ public static class DependencyInjection
         });
         services.AddScoped<IUserStore, UserStore>();
         services.AddScoped<IAccountStore, AccountStore>();
+        services.AddScoped<ITransactionStore, TransactionStore>();
         services.AddSingleton<AccountNumberFactory>();
         services.AddSingleton<IPasswordHasher, AspNetPasswordHasher>();
         services.AddSingleton<IUserIdFactory, UserIdFactory>();
+        services.AddSingleton<ITransactionIdFactory, TransactionIdFactory>();
         services.AddSingleton<IJwtTokenIssuer, JwtTokenIssuer>();
         return services;
     }

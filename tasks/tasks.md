@@ -299,7 +299,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-007 — Deposit and fetch transaction
 
 - **Priority:** MUST
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Deposit updates balance atomically; fetch transaction by id on the owning account.
 - **Requirement references:** REQ-TXN-001–005, REQ-TXN-008–009, REQ-TXN-011–015, REQ-TXN-016, REQ-DATA-003–004, Q-003, Q-006
 - **Design / ADR references:** ADR-0003, ADR-0004, ADR-0008, ADR-0013, ADR-0014
@@ -315,7 +315,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
   - SOLID: create vs get are separate handlers; deposit cap is a domain invariant (not a controller `if`); withdrawal in TASK-009 extends this handler’s type switch + domain, not a new god service
 - **Test scope:** **Gherkin `Features/Transactions.feature`:** deposit with required data → 201 and balance increased; invalid amount → 400; unauthenticated → 401; other user's account → 403; missing account → 404; fetch own transaction → 200; fetch 401; fetch bad id/account pattern → 400; fetch other user's account → 403; unknown or wrong-account `transactionId` → 404; deposit that would exceed `10000.00` → 422 and unchanged balance; sink has no amount, `reference`, or full account number
 - **Verification / definition of done:** `dotnet test` passes those scenarios. Withdrawal may still be unimplemented.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 90 passed, 0 failed (deposit 201 + balance, invalid amount 400, 401/403/404 create, fetch 200/401/400/403/404 including wrong-account txn, deposit over cap 422 + unchanged 10000.00). Withdrawal domain/SQL path exists but is not Gherkin-covered (TASK-009).
 
 ---
 
