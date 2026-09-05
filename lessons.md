@@ -25,3 +25,33 @@ Do not use this file as a diary. Capture lessons that could help another enginee
 - **Related files/tasks/ADRs:** `openapi.yaml`, `requirements/technical-requirements.md` (A-001, REQ-API-008)
 
 ---
+
+### LESSON-002 — Do not store GBP amounts as SQLite REAL
+
+- **Date:** 2026-09-05
+- **Context:** Designing persistence for two-decimal GBP balances on SQLite, which has no native decimal type.
+- **Lesson:** Domain `decimal` is not enough if the store can coerce to floating point. Integer minor units (pence) keep scale exact.
+- **Action / convention:** Persist `balance` and transaction `amount` as integer pence; convert only at the EF boundary; emit major units in JSON.
+- **Related files/tasks/ADRs:** ADR-0003, REQ-NFR-004
+
+---
+
+### LESSON-003 — Default framework logs leak identifiers
+
+- **Date:** 2026-09-05
+- **Context:** Design amended to log at every layer without PII.
+- **Lesson:** ASP.NET request logs print raw URLs (`/v1/accounts/01234567`) and EF `EnableSensitiveDataLogging` prints SQL parameter values such as email. Layered logging is unsafe unless those defaults are turned off and only an allow-list is logged.
+- **Action / convention:** Log route templates, not raw paths; never enable EF sensitive-data logging; never log request bodies; correlate with `RequestId` and `usr-` / `tan-` ids only.
+- **Related files/tasks/ADRs:** ADR-0007, `design/system-design.md` section 12
+
+---
+
+### LESSON-004 — CQRS for CRUD means handlers, not two databases
+
+- **Date:** 2026-09-05
+- **Context:** Design discussion on whether CQRS reduces regression on basic CRUD.
+- **Lesson:** Separate command and query handlers isolate change (SRP/ISP) and keep stretch work off the MVP files. Separate read stores, events, and MediatR are not required for that benefit.
+- **Action / convention:** One handler per use case, shared ownership helpers, one EF model; reject dual-database CQRS unless a scaling requirement appears.
+- **Related files/tasks/ADRs:** ADR-0008, REQ-NFR-003
+
+---

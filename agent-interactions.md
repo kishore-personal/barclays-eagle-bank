@@ -134,3 +134,150 @@ Because the repository may be public, do **not** store secrets, credentials, per
 - **Approval state:** plan explicitly approved by the user
 
 ---
+
+### 2026-09-05 12:15 — barclays-design
+
+- **User intent:** Produce a technical design from the approved requirements for a .NET 10 Eagle Bank API.
+- **Agent actions actually performed:**
+  - Confirmed plan was `APPROVED` and set design `IN_PROGRESS`.
+  - Wrote `design/system-design.md` covering architecture, domain, persistence, concurrency, auth, tests, and OpenAPI compliance.
+  - Created ADR-0001–ADR-0006 as Proposed (not marked Accepted).
+  - Updated `adrs.md` and recorded LESSON-002.
+  - Did not implement production endpoints or create the task list.
+- **Decisions / outcomes:**
+  - Recommended (pending user approval): controllers + clean architecture; EF Core/SQLite; integer pence; conditional balance UPDATE; JWT + PasswordHasher; xUnit + WebApplicationFactory.
+  - Design set to `AWAITING_APPROVAL`.
+- **Files changed:**
+  - `design/system-design.md`
+  - `docs/adr/ADR-0001-clean-architecture-controllers.md`
+  - `docs/adr/ADR-0002-ef-core-sqlite.md`
+  - `docs/adr/ADR-0003-money-integer-pence.md`
+  - `docs/adr/ADR-0004-balance-consistency.md`
+  - `docs/adr/ADR-0005-jwt-password-hasher.md`
+  - `docs/adr/ADR-0006-testing-sqlite.md`
+  - `adrs.md`
+  - `lessons.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** Read approved requirements, OpenAPI location, workflow state, and templates. No tests or builds.
+- **Workflow transition:** design `NOT_STARTED` -> design `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the design; ADRs remain Proposed
+
+---
+
+### 2026-09-05 12:21 — barclays-design (logging amendment)
+
+- **User intent:** Add logging at all layers for traceability and ensure no PII is logged.
+- **Agent actions actually performed:**
+  - Expanded observability, component responsibilities, security, testing, and risks in `design/system-design.md`.
+  - Added ADR-0007 (Proposed) and LESSON-003.
+  - Did not mark the design approved and did not start tasks.
+- **Decisions / outcomes:**
+  - Structured `ILogger` on Api, Application, Domain, and Infrastructure.
+  - Allow-list: `RequestId`, opaque `userId`/`transactionId`, route templates, result codes.
+  - Denylist includes email, name, phone, address, passwords, tokens, bodies, full account numbers, and transaction references.
+  - EF sensitive-data logging stays off.
+- **Files changed:**
+  - `design/system-design.md`
+  - `docs/adr/ADR-0007-structured-logging-no-pii.md`
+  - `adrs.md`
+  - `lessons.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** none; design still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the amended design
+
+---
+
+### 2026-09-05 12:25 — barclays-design (CQRS amendment)
+
+- **User intent:** Ask whether CQRS is better for basic CRUD to reduce regression and follow SOLID.
+- **Agent actions actually performed:**
+  - Adopted lightweight CQRS (one command/query handler per use case, one store) as ADR-0008.
+  - Clarified that full CQRS (separate read database / events / MediatR) remains out of scope.
+  - Updated ADR-0001 notes and `design/system-design.md`.
+  - Did not mark the design approved and did not start tasks.
+- **Decisions / outcomes:**
+  - Controllers dispatch a single handler; stretch work is new files, not edits to MVP handlers.
+  - Dispatcher is explicit handler injection, not MediatR (DQ-006).
+- **Files changed:**
+  - `design/system-design.md`
+  - `docs/adr/ADR-0001-clean-architecture-controllers.md`
+  - `docs/adr/ADR-0008-lightweight-cqrs.md`
+  - `adrs.md`
+  - `lessons.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** none; design still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the amended design
+
+---
+
+### 2026-09-05 12:27 — barclays-design (EDA / performance)
+
+- **User intent:** Ask whether event-driven architecture is needed for performance.
+- **Agent actions actually performed:**
+  - Recorded ADR-0009: do not implement a broker, outbox, or async write path.
+  - Updated design non-goals, traceability, risks, and DQ-007.
+  - Did not mark the design approved and did not start tasks.
+- **Decisions / outcomes:**
+  - Recommended no EDA: the contract is synchronous and balances must commit in the same request (ADR-0004).
+  - Performance stays in-process (indexes, `AsNoTracking` queries, optional later PostgreSQL).
+- **Files changed:**
+  - `design/system-design.md`
+  - `docs/adr/ADR-0009-no-eda.md`
+  - `adrs.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** none; design still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the amended design
+
+---
+
+### 2026-09-05 12:28 — barclays-design (caching / production)
+
+- **User intent:** Ask whether productionising the app requires caching.
+- **Agent actions actually performed:**
+  - Recorded ADR-0010: no Redis/memory/HTTP cache in the submission.
+  - Documented a production follow-up: optional user-profile cache only; never cache balance as source of truth.
+  - Did not mark the design approved and did not start tasks.
+- **Decisions / outcomes:**
+  - Caching is not required for the take-home.
+  - In production, cache is a later read optimisation after indexes/PostgreSQL, not a ledger store.
+- **Files changed:**
+  - `design/system-design.md`
+  - `docs/adr/ADR-0010-no-cache-for-submission.md`
+  - `adrs.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** none; design still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the amended design
+
+---
+
+### 2026-09-05 12:32 — barclays-design (rate limiting and SAST)
+
+- **User intent:** Require production rate limiting and SAST through most of the SDLC.
+- **Agent actions actually performed:**
+  - Added ADR-0011 and updated security, testing, productionisation, and risks in `design/system-design.md`.
+  - Did not add rate-limit or SAST implementation to the take-home scope.
+  - Did not mark the design approved and did not start tasks.
+- **Decisions / outcomes:**
+  - Production: edge rate limits, strictest on login and create-user; `429` + `Retry-After`.
+  - SAST in IDE/PR/CI/scheduled scans and a release gate; complement with SCA and secrets scanning.
+- **Files changed:**
+  - `design/system-design.md`
+  - `docs/adr/ADR-0011-production-rate-limiting-and-sast.md`
+  - `adrs.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** none; design still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the amended design
+
+---
+

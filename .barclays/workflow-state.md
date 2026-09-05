@@ -6,7 +6,7 @@
 |---|---|
 | init | COMPLETE |
 | plan | APPROVED |
-| design | NOT_STARTED |
+| design | AWAITING_APPROVAL |
 | tasks | NOT_STARTED |
 | implement-and-test | NOT_STARTED |
 
@@ -17,7 +17,7 @@
 | Stage | Approval | Evidence summary |
 |---|---|---|
 | plan | Explicitly approved | User approved the technical requirements in chat on 2026-09-05, including Q-007 (.NET 10) and the documented defaults for Q-001–Q-006. |
-| design | Pending | |
+| design | Pending | System design and ADR-0001–ADR-0011 drafted as Proposed. Waiting for explicit user approval. |
 | tasks | Pending | |
 
 ## Notes
