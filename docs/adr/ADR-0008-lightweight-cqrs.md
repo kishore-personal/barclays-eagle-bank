@@ -40,7 +40,7 @@ Use lightweight CQRS in the Application project:
 ### Option D — MediatR as the dispatcher
 
 - Advantages: Pipeline behaviours for logging/validation.
-- Disadvantages: Controllers depend on `IMediator` (hides real dependencies); extra package to explain in interview. Explicit handler injection keeps SOLID (especially ISP) clearer.
+- Disadvantages: Controllers depend on `IMediator` (hides real dependencies); extra package to explain in interview; MediatR 13+ is dual RPL/commercial (ADR-0015). Explicit handler injection keeps SOLID (especially ISP) clearer and avoids that licence.
 
 ## Consequences
 

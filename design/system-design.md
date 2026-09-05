@@ -108,7 +108,7 @@ EagleBank.Domain       User, BankAccount, Transaction, Money, invariants
 EagleBank.Infrastructure   EF Core, SQLite, PasswordHasher, JwtTokenService
 ```
 
-Application folders are sliced by use case, for example `Users/CreateUser`, `Users/GetUser`, `Accounts/CreateAccount`, `Transactions/CreateTransaction`. Shared ownership and mapping helpers live beside them so they are not copy-pasted. Queries use the same tables with `AsNoTracking()`. There is no second read model.
+Application folders are sliced by use case, for example `Users/CreateUser`, `Users/GetUser`, `Accounts/CreateAccount`, `Transactions/CreateTransaction`. Shared ownership and **hand-written** mapping helpers live beside them so they are not copy-pasted. Do not use AutoMapper or MediatR (ADR-0015). Queries use the same tables with `AsNoTracking()`. There is no second read model.
 
 **Proposed solution layout**
 
@@ -119,19 +119,23 @@ src/EagleBank.Application
 src/EagleBank.Domain
 src/EagleBank.Infrastructure
 tests/EagleBank.Tests
+  Features/          # Reqnroll .feature files (ADR-0013)
+  StepDefinitions/
+  Support/
+  Unit/              # xUnit unit tests (ADR-0006)
 openapi.yaml
 ```
 
-Controllers are the HTTP boundary (ADR-0001). Each action injects the handler for that command or query (ADR-0008), not a multi-method application service. Dependency injection is the default ASP.NET Core container: API registers Infrastructure implementations of Application ports.
+Controllers are the HTTP boundary (ADR-0001). Each action injects the handler for that command or query (ADR-0008), not a multi-method application service. Dependency injection is the default ASP.NET Core container: API registers Infrastructure implementations of Application ports. SOLID conventions are binding (ADR-0014): one reason to change per type, new use cases as new handlers, narrow ports, Application/Domain free of ASP.NET and EF.
 
 ## 5. Component responsibilities
 
 | Component | Responsibility | Must not |
 |---|---|---|
 | Controllers | Bind JSON/path params, dispatch one command or query, return status + body; open a log scope | Own balance rules, hash passwords, run SQL, log bodies |
-| Command handlers | Mutating use cases: validate orchestration, authorise, call domain, save | Serve reads; depend on ASP.NET types; log PII |
-| Query handlers | Read-only use cases: load, authorise, map response (`AsNoTracking`) | Mutate balance or insert transactions |
-| Exception handler | Map domain/application exceptions to OpenAPI error bodies; log outcome with `RequestId` | Catch and swallow invariant failures; log exception messages that contain PII |
+| Command handlers | Mutating use cases: validate orchestration, authorise, call domain, save; throw typed `EagleBankException` subtypes | Serve reads; depend on ASP.NET types; set HTTP status; log PII |
+| Query handlers | Read-only use cases: load, authorise, map response (`AsNoTracking`); throw typed exceptions | Mutate balance; set HTTP status |
+| Exception handler | Single DI-registered `IExceptionHandler` + injected `IExceptionResponseFactory`; map typed exceptions to OpenAPI bodies; log type + `RequestId` | Per-controller try/catch; log exception messages that contain PII |
 | Auth middleware | Validate JWT; set current `userId`; put `userId` in the log scope | Decide resource ownership; log the token or `Authorization` header |
 | Shared application helpers | Ownership `403`/`404`, email uniqueness, DTO mapping | Become a second god service |
 | Domain | IDs, money, balance invariants, immutability of transactions; log invariant rejection by reason code | Know HTTP or EF; log monetary amounts, account numbers, or personal fields |
@@ -268,19 +272,27 @@ Failed validation, authn, authz, or `422` does not commit a transaction row or a
 
 ## 10. Validation and errors
 
-**Proposed:** FluentValidation on request DTOs, plus domain checks for balance rules.
+FluentValidation on request DTOs, plus domain checks for balance rules. HTTP mapping is a **generic injected framework** (ADR-0012), not per-controller try/catch.
 
-| Failure | HTTP | Body |
-|---|---|---|
-| Missing/invalid fields, bad path format, duplicate email | `400` | `BadRequestErrorResponse` (`message`, `details[].field/message/type`) |
-| Missing/invalid/expired JWT; bad login | `401` | `ErrorResponse` |
-| Authenticated but not owner | `403` | `ErrorResponse` |
-| Unknown user/account/transaction, or transaction/account mismatch | `404` | `ErrorResponse` |
-| Delete user while accounts exist | `409` | `ErrorResponse` |
-| Insufficient funds or deposit would exceed `10000.00` | `422` | `ErrorResponse` |
-| Unhandled exception | `500` | `ErrorResponse` without stack traces or secrets |
+**Process**
 
-Application exceptions (`NotFoundException`, `ForbiddenException`, `ConflictException`, `InsufficientFundsException`, `BalanceCapException`) are mapped in one API exception handler.
+1. Handler or domain throws a typed `EagleBankException` (or FluentValidation fails).
+2. The DI-registered `IExceptionHandler` receives it.
+3. Injected `IExceptionResponseFactory` maps type → status + OpenAPI body.
+4. Handler logs exception **type** and `RequestId` only (ADR-0007).
+5. Unknown exceptions → `500` with a fixed safe message.
+
+Handlers and controllers do not set status codes for business failures. A new failure mode is a new exception type plus mapper convention — no controller change.
+
+| Failure | HTTP | Body | Typical type |
+|---|---|---|---|
+| Missing/invalid fields, bad path format, duplicate email | `400` | `BadRequestErrorResponse` | FluentValidation / `ValidationException` |
+| Missing/invalid/expired JWT; bad login | `401` | `ErrorResponse` | Auth middleware / login handler |
+| Authenticated but not owner | `403` | `ErrorResponse` | `ForbiddenException` |
+| Unknown user/account/transaction, or txn/account mismatch | `404` | `ErrorResponse` | `NotFoundException` |
+| Delete user while accounts exist | `409` | `ErrorResponse` | `ConflictException` |
+| Insufficient funds or deposit would exceed `10000.00` | `422` | `ErrorResponse` | `InsufficientFundsException` / `BalanceCapException` |
+| Unhandled exception | `500` | `ErrorResponse` | none (fallback) |
 
 `POST /v1/users` `400` uses the same `BadRequestErrorResponse` shape even though the original spec omitted a schema.
 
@@ -348,11 +360,12 @@ Every layer logs. Logs exist for traceability, not for dumping payloads. No APM 
 
 | Layer | What | Tooling |
 |---|---|---|
-| Domain unit | Money, deposit/withdraw invariants, reject overdraft and cap | xUnit |
-| Application unit | One test class per handler: ownership 403/404; duplicate email; deposit/withdraw outcomes | xUnit + fakes if useful |
-| API integration | MVP HTTP cases in REQ-TEST-001; withdrawal `422` if implemented; log sink has no PII on create-user/login | `WebApplicationFactory`, xUnit, HttpClient |
+| Domain unit | Money, deposit/withdraw invariants, reject overdraft and cap | xUnit under `tests/EagleBank.Tests/Unit/` |
+| Application unit | Exception mapper; optional handler tests with fakes | xUnit |
+| API acceptance | Brief Given/When/Then scenarios (REQ-TEST-001–003); login; deposit cap `422`; PII-free log sink on create-user/login | Reqnroll `.feature` files + `WebApplicationFactory` + isolated SQLite (ADR-0013, ADR-0006) |
+| Concurrency | Two parallel withdrawals cannot overdraw | xUnit (not Gherkin) |
 
-Each integration fixture gets an isolated SQLite database. Tests assert status codes and JSON shapes (`token` absent on user responses, `details` on `400`).
+Each Reqnroll scenario (and any remaining xUnit fixture) gets an isolated SQLite database. Steps assert status codes and JSON shapes (`token` absent on user responses, `details` on `400`). Feature wording follows the brief, corrected for approved contract rules (`accountNumber`, public create-user, partial PATCH).
 
 When productionising, CI should also run SAST (and SCA) on every change, not only `dotnet test` (ADR-0011). That pipeline is out of scope for the take-home binary.
 
@@ -396,6 +409,8 @@ No claim that tests passed unless they were run.
 | Credential stuffing / signup flooding in production | ADR-0011: rate-limit login and create-user at the edge; return `429` |
 | Vulnerabilities found only at release | ADR-0011: SAST in IDE/PR/CI/scheduled scans and a release gate |
 | Copy-pasted ownership checks in every handler | Small shared authorisation helper used by commands and queries |
+| Fat services / hidden `IMediator` dependencies | ADR-0014: one handler per use case; inject that handler; Application defines ports |
+| AutoMapper / MediatR licence (RPL or commercial key) | ADR-0015: manual mapping; permissive NuGet only; no licence keys |
 
 ## 17. ADR summary
 
@@ -406,12 +421,16 @@ No claim that tests passed unless they were run.
 | ADR-0003 | Money value object; persist integer pence | Accepted |
 | ADR-0004 | Single DB transaction + conditional balance update | Accepted |
 | ADR-0005 | Custom JWT + `PasswordHasher<T>`, not ASP.NET Identity | Accepted |
-| ADR-0006 | xUnit + `WebApplicationFactory` + isolated SQLite | Accepted |
+| ADR-0006 | xUnit unit tests + `WebApplicationFactory` + isolated SQLite | Accepted |
 | ADR-0007 | Structured logging on every layer; no PII | Accepted |
 | ADR-0008 | Lightweight CQRS: one command/query handler per use case, one store | Accepted |
 | ADR-0009 | No event-driven architecture | Accepted |
 | ADR-0010 | No application cache in the submission | Accepted |
 | ADR-0011 | Production rate limiting and SAST across the SDLC | Accepted |
+| ADR-0012 | Generic injected exception-handling framework | Accepted |
+| ADR-0013 | Reqnroll Gherkin for HTTP acceptance tests | Accepted |
+| ADR-0014 | SOLID conventions for maintainability | Accepted |
+| ADR-0015 | Permissive, license-key-free dependencies only | Accepted |
 
 ## 18. Open design questions
 
@@ -424,9 +443,9 @@ These defaults were accepted with design approval:
 | DQ-003 | Controllers vs Minimal APIs? | Controllers (ADR-0001). |
 | DQ-004 | SQLite vs PostgreSQL for submission? | SQLite file (ADR-0002). |
 | DQ-005 | Implement stretch in the first delivery increment? | Design for all; implement MVP first, then withdrawal before other stretch. |
-| DQ-006 | MediatR vs explicit handler injection? | Explicit handler interfaces (ADR-0008). |
+| DQ-006 | MediatR vs explicit handler injection? | Explicit handler interfaces (ADR-0008, ADR-0015). |
 | DQ-007 | Event-driven architecture for performance? | No (ADR-0009). |
 | DQ-008 | Redis / response caching for production? | Not in this submission. Later: profile reads only, never balance (ADR-0010). |
 | DQ-009 | Rate limiting and SAST in the take-home? | No. Required when productionising (ADR-0011). |
 
-ADR-0001–ADR-0011 and DQ-001–DQ-009 were accepted with explicit design approval on 2026-09-05.
+ADR-0001–ADR-0011 and DQ-001–DQ-009 were accepted with explicit design approval on 2026-09-05. ADR-0012–ADR-0015 were accepted on user request during task review the same day.

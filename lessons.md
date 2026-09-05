@@ -55,3 +55,33 @@ Do not use this file as a diary. Capture lessons that could help another enginee
 - **Related files/tasks/ADRs:** ADR-0008, REQ-NFR-003
 
 ---
+
+### LESSON-005 — Keep Gherkin for HTTP, xUnit for units and concurrency
+
+- **Date:** 2026-09-05
+- **Context:** The brief is Given/When/Then; domain money and parallel withdrawals are not narrative HTTP stories.
+- **Lesson:** Feature files trace acceptance outcomes to the brief. Value-object rules and two-at-once requests stay clearer as xUnit.
+- **Action / convention:** Reqnroll for `/v1` status and body scenarios; xUnit under `Unit/` for Money, exception mapping, and TASK-013 concurrency.
+- **Related files/tasks/ADRs:** ADR-0006, ADR-0013, `tasks/tasks.md`
+
+---
+
+### LESSON-006 — SOLID needs a checklist, not only folder names
+
+- **Date:** 2026-09-05
+- **Context:** Clean architecture + CQRS handlers already implied SOLID, but the task list did not say so explicitly.
+- **Lesson:** A `UserService` can still sit in Application and violate SRP/ISP. Maintainability comes from one handler per use case, narrow ports, and composition root only in Api.
+- **Action / convention:** Follow ADR-0014 during implementation; TASK-016 reviews project references and rejects fat services.
+- **Related files/tasks/ADRs:** ADR-0014, ADR-0008, REQ-NFR-003
+
+---
+
+### LESSON-007 — Do not take AutoMapper or MediatR for a public POC
+
+- **Date:** 2026-09-05
+- **Context:** AutoMapper 15+ and MediatR 13+ are dual RPL-1.5 / commercial (Lucky Penny). Older MIT/Apache builds remain, but they are unsupported.
+- **Lesson:** A take-home restore must not require a licence key or RPL obligations. Pinning last-MIT versions still looks like a licence risk and skips security patches.
+- **Action / convention:** Manual DTO mapping; explicit handlers; NuGet limited to MIT/Apache/BSD/Microsoft. TASK-016 audits package IDs.
+- **Related files/tasks/ADRs:** ADR-0015, ADR-0008
+
+---

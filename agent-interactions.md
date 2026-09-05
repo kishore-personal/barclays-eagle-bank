@@ -321,3 +321,158 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 12:54 — barclays-tasks
+
+- **User intent:** Decompose the approved design into ordered implementation tasks.
+- **Agent actions actually performed:**
+  - Confirmed init complete and plan/design approved.
+  - Wrote `tasks/tasks.md` with TASK-001–TASK-016 (no implementation).
+  - Marked TASK-001–TASK-008 and TASK-016 as MUST (MVP); TASK-009–TASK-012 SHOULD; TASK-013–TASK-015 COULD.
+- **Decisions / outcomes:**
+  - Redis, EDA, in-app rate limiting, and SAST jobs have no tasks (approved out of take-home scope).
+  - Tasks set to `AWAITING_APPROVAL`.
+- **Files changed:**
+  - `tasks/tasks.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** tasks `NOT_STARTED` -> tasks `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the task list
+
+---
+
+### 2026-09-05 13:12 — barclays-tasks (HTTP contract check)
+
+- **User intent:** Check task list against HTTP verbs and status codes.
+- **Agent actions actually performed:**
+  - Compared `openapi.yaml` and approved requirements with `tasks/tasks.md`.
+  - Added a verb/status matrix and tightened TASK-004, TASK-006, TASK-007, TASK-010, TASK-011, TASK-012.
+  - Did not implement code or mark tasks approved.
+- **Decisions / outcomes:**
+  - Verbs were already correct (no PUT; no transaction PATCH/DELETE).
+  - Fixes: list accounts is 200/401 only; delete account has no 409; login 400; missing 401/400 on PATCH/DELETE/fetch txn called out in test scope.
+- **Files changed:**
+  - `tasks/tasks.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** Spec/requirements/task comparison only. No tests or builds.
+- **Workflow transition:** none; tasks still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the task list
+
+---
+
+### 2026-09-05 13:16 — barclays-tasks (all-layer logging)
+
+- **User intent:** Check whether tasks require no-PII logging at every layer.
+- **Agent actions actually performed:**
+  - Confirmed the first draft only covered logging in TASK-002/004/016.
+  - Added a cross-cutting allow/deny table and per-task logging/test bullets for TASK-002–TASK-012 and TASK-016.
+  - Did not implement code or mark tasks approved.
+- **Decisions / outcomes:**
+  - Feature tasks must use Api, Application, Domain, and Infrastructure logs with the ADR-0007 denylist.
+- **Files changed:**
+  - `tasks/tasks.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** none; tasks still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the task list
+
+---
+
+### 2026-09-05 13:18 — barclays-tasks (exception framework)
+
+- **User intent:** Require a generic, injected, maintainable exception-handling framework.
+- **Agent actions actually performed:**
+  - Added ADR-0012 and updated design section 10 and component responsibilities.
+  - Expanded TASK-002 and added a cross-cutting exception-handling rule to `tasks/tasks.md`.
+  - Did not implement code or mark tasks approved.
+- **Decisions / outcomes:**
+  - One `IExceptionHandler` + injected `IExceptionResponseFactory`; handlers throw typed `EagleBankException` subtypes and do not set HTTP status.
+- **Files changed:**
+  - `docs/adr/ADR-0012-injected-exception-framework.md`
+  - `design/system-design.md`
+  - `adrs.md`
+  - `tasks/tasks.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** none; tasks still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the task list
+
+---
+
+### 2026-09-05 13:25 — barclays-tasks (licence-safe dependencies)
+
+- **User intent:** Avoid licence implications on this public POC (examples: AutoMapper, MediatR).
+- **Agent actions actually performed:**
+  - Recorded ADR-0015: permissive MIT/Apache/BSD/Microsoft packages only; hand-written mapping; no AutoMapper or MediatR at any version.
+  - Updated tasks (allow/deny list, TASK-001/002/004/008/016) and ADR-0008 (licence as extra reason to skip MediatR).
+  - Did not implement code or mark tasks approved.
+- **Decisions / outcomes:**
+  - Do not pin last-MIT AutoMapper 14 / MediatR 12 as a workaround.
+  - FluentValidation and Reqnroll remain allowed (permissive).
+- **Files changed:**
+  - `docs/adr/ADR-0015-permissive-dependencies.md`
+  - `docs/adr/ADR-0008-lightweight-cqrs.md`
+  - `design/system-design.md`
+  - `adrs.md`
+  - `tasks/tasks.md`
+  - `lessons.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** none; tasks still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the task list
+
+---
+
+### 2026-09-05 13:23 — barclays-tasks (SOLID maintainability)
+
+- **User intent:** Ensure SOLID is used so the application stays maintainable; update tasks if that was missing.
+- **Agent actions actually performed:**
+  - Confirmed design already implied SOLID (handlers, DI, exception OCP) but tasks had no explicit rule.
+  - Added ADR-0014 and a cross-cutting SOLID table on `tasks/tasks.md`.
+  - Bound TASK-001 project references (DIP), feature tasks (one handler, no fat services), and TASK-016 review.
+  - Did not implement code or mark tasks approved.
+- **Decisions / outcomes:**
+  - SOLID is an implementation constraint: S/O/L/I/D mapped to concrete do/don't; create-transaction remains one use case for deposit and withdrawal.
+- **Files changed:**
+  - `docs/adr/ADR-0014-solid.md`
+  - `design/system-design.md`
+  - `adrs.md`
+  - `tasks/tasks.md`
+  - `lessons.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** none; tasks still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the task list
+
+---
+
+### 2026-09-05 13:21 — barclays-tasks (Gherkin acceptance tests)
+
+- **User intent:** Confirm unit and integration tests exist, and require Gherkin-style coverage from the brief scenarios.
+- **Agent actions actually performed:**
+  - Recorded ADR-0013 (Reqnroll + `.feature` files on the existing WebApplicationFactory/SQLite host).
+  - Extended ADR-0006 and design section 13: xUnit for unit/concurrency; Reqnroll for HTTP acceptance.
+  - Updated `tasks/tasks.md` with a feature-file catalogue, shared steps, and per-task Gherkin scopes.
+  - Did not implement code or mark tasks approved.
+- **Decisions / outcomes:**
+  - HTTP Given/When/Then from the requirements become `Features/Users.feature`, `Auth.feature`, `Accounts.feature`, `Transactions.feature`.
+  - Concurrent withdrawal stays xUnit.
+- **Files changed:**
+  - `docs/adr/ADR-0013-reqnroll-gherkin.md`
+  - `docs/adr/ADR-0006-testing-sqlite.md`
+  - `design/system-design.md`
+  - `adrs.md`
+  - `tasks/tasks.md`
+  - `lessons.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** none; tasks still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the task list
+
+---
+

@@ -11,7 +11,9 @@ MVP paths and error codes must be proven with automated tests. The test store sh
 
 ## Decision
 
-Use xUnit. Cover domain invariants with unit tests. Cover HTTP behaviour with `WebApplicationFactory` against a unique SQLite database per fixture (file or SQLite in-memory with a shared relational cache as needed for EF). Assert status codes and OpenAPI JSON shapes.
+Use xUnit for **unit** tests (domain invariants, exception mapper). Cover HTTP behaviour with `WebApplicationFactory` against a unique SQLite database per fixture (file or SQLite in-memory with a shared relational cache as needed for EF). Assert status codes and OpenAPI JSON shapes.
+
+HTTP acceptance cases are written as Gherkin and executed by Reqnroll on that same host (ADR-0013).
 
 ## Alternatives considered
 
@@ -44,3 +46,5 @@ Use xUnit. Cover domain invariants with unit tests. Cover HTTP behaviour with `W
 ## Notes
 
 Do not report a green build unless `dotnet test` was actually run.
+
+HTTP scenario style is specified in ADR-0013 (Reqnroll Gherkin). This ADR remains the decision for xUnit, `WebApplicationFactory`, and isolated SQLite.
