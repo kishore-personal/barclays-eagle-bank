@@ -1,8 +1,8 @@
 # ADR-0003: Money value object persisted as integer pence
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-05
-- **Decision owners:** Pending user approval of design
+- **Decision owners:** User (explicit design approval)
 - **Related requirements:** REQ-NFR-004, REQ-ACCOUNT-013, REQ-TXN-004, A-007
 
 ## Context

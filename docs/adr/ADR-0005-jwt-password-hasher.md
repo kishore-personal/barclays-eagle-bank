@@ -1,8 +1,8 @@
 # ADR-0005: JWT bearer with PasswordHasher, not ASP.NET Identity
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-05
-- **Decision owners:** Pending user approval of design
+- **Decision owners:** User (explicit design approval)
 - **Related requirements:** REQ-AUTH-001–007, REQ-NFR-005, REQ-USER-004, Q-001, Q-002
 
 ## Context

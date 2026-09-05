@@ -1,8 +1,8 @@
 # ADR-0004: Atomic balance update with a conditional write
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-05
-- **Decision owners:** Pending user approval of design
+- **Decision owners:** User (explicit design approval)
 - **Related requirements:** REQ-TXN-005, REQ-TXN-006, REQ-TXN-007, REQ-TXN-016, REQ-DATA-003, REQ-DATA-004, Q-006
 
 ## Context

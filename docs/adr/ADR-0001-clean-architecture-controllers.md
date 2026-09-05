@@ -1,8 +1,8 @@
 # ADR-0001: Clean architecture with controller HTTP boundary
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-05
-- **Decision owners:** Pending user approval of design
+- **Decision owners:** User (explicit design approval)
 - **Related requirements:** REQ-NFR-001, REQ-NFR-003, REQ-API-001
 
 ## Context

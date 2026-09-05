@@ -1,8 +1,8 @@
 # ADR-0010: No application cache in the submission; production cache only non-ledger reads
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-05
-- **Decision owners:** Pending user approval of design
+- **Decision owners:** User (explicit design approval)
 - **Related requirements:** REQ-NFR-006, REQ-DATA-003, REQ-TXN-005, REQ-TXN-016, REQ-API-003
 
 ## Context

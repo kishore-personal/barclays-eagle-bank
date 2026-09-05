@@ -1,8 +1,8 @@
 # ADR-0008: Lightweight CQRS (command/query handlers, one store)
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-05
-- **Decision owners:** User requested CQRS for regression isolation and SOLID; pending design approval
+- **Decision owners:** User (explicit design approval)
 - **Related requirements:** REQ-NFR-003, REQ-TEST-001
 
 ## Context

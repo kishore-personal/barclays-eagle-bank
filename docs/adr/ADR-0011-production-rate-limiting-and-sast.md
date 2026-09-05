@@ -1,8 +1,8 @@
 # ADR-0011: Production rate limiting and SAST across the SDLC
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-05
-- **Decision owners:** User requested; pending design approval
+- **Decision owners:** User (explicit design approval)
 - **Related requirements:** REQ-NFR-005, REQ-NFR-006, REQ-ERR-001, REQ-DEL-003
 
 ## Context

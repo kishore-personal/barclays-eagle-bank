@@ -1,8 +1,8 @@
 # ADR-0002: EF Core 10 with SQLite
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-05
-- **Decision owners:** Pending user approval of design
+- **Decision owners:** User (explicit design approval)
 - **Related requirements:** REQ-DATA-001, REQ-DATA-002, REQ-NFR-002, REQ-NFR-006, A-009
 
 ## Context

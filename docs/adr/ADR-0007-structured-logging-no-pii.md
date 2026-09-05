@@ -1,8 +1,8 @@
 # ADR-0007: Structured logging on every layer without PII
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-05
-- **Decision owners:** Pending user approval of design
+- **Decision owners:** User (explicit design approval)
 - **Related requirements:** REQ-ERR-007, REQ-ERR-008, REQ-NFR-005, REQ-DEL-003
 
 ## Context
@@ -45,4 +45,4 @@ Never log the denylist in section 12 of `design/system-design.md`. Log route tem
 
 ## Notes
 
-This ADR is a user-requested amendment to the draft design. It stays Proposed until the design is approved.
+This ADR was a user-requested amendment and was accepted with design approval on 2026-09-05.

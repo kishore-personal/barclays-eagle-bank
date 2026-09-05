@@ -1,8 +1,8 @@
 # ADR-0006: xUnit integration tests with isolated SQLite
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-05
-- **Decision owners:** Pending user approval of design
+- **Decision owners:** User (explicit design approval)
 - **Related requirements:** REQ-TEST-001–005
 
 ## Context

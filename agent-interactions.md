@@ -281,3 +281,43 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 12:42 — barclays-design (architecture diagram)
+
+- **User intent:** Produce an architecture diagram to review before design approval.
+- **Agent actions actually performed:**
+  - Added a Mermaid flowchart to `design/system-design.md` section 4.
+  - Created a review canvas for the same runtime picture (submission vs production follow-ups).
+  - Did not mark the design approved and did not start tasks.
+- **Decisions / outcomes:**
+  - Diagram matches the proposed design: one process, CQRS-lite, one SQLite store.
+- **Files changed:**
+  - `design/system-design.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** none; design still `AWAITING_APPROVAL`
+- **Approval state:** awaiting explicit user approval of the design
+
+---
+
+### 2026-09-05 12:51 — barclays-design (explicit approval)
+
+- **User intent:** Explicitly approve the system design.
+- **Agent actions actually performed:**
+  - Marked design `APPROVED` and set current stage to `tasks`.
+  - Set ADR-0001–ADR-0011 to Accepted.
+  - Did not create the task list or start implementation.
+- **Decisions / outcomes:**
+  - `design/system-design.md` and accepted ADRs are the approved design.
+  - `/barclays-tasks` is unlocked.
+- **Files changed:**
+  - `.barclays/workflow-state.md`
+  - `design/system-design.md`
+  - `adrs.md`
+  - `docs/adr/ADR-0001` through `ADR-0011`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** design `AWAITING_APPROVAL` -> design `APPROVED`; current stage `tasks`
+- **Approval state:** design explicitly approved by the user
+
+---
+

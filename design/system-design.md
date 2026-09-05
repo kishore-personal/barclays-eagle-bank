@@ -6,7 +6,7 @@ Eagle Bank will be a single ASP.NET Core 10 Web API that implements the approved
 
 The recommended shape is a small clean architecture with **lightweight CQRS** in Application: thin controllers dispatch one command or query handler each, a domain model owns money and balance invariants, and EF Core over SQLite persists a single model. Controllers do not contain business rules. Every layer writes structured logs keyed by `RequestId`; PII and secrets are never logged (ADR-0007).
 
-These design choices are **proposed** until you explicitly approve this document. Alternatives are recorded in ADRs.
+These design choices were **explicitly approved** on 2026-09-05. Alternatives remain recorded in ADRs.
 
 ## 2. Goals and non-goals
 
@@ -49,6 +49,48 @@ These design choices are **proposed** until you explicitly approve this document
 | Production rate limiting and SAST across the SDLC | REQ-NFR-005, REQ-DEL-003, ADR-0011 |
 
 ## 4. Proposed architecture
+
+```mermaid
+flowchart TB
+  Client["HTTP client<br/>JSON + Bearer JWT"]
+
+  subgraph api ["EagleBank.Api — this process"]
+    Edge["JWT + RequestId + exception mapping"]
+    Ctrl["Controllers"]
+  end
+
+  subgraph app ["EagleBank.Application"]
+    Cmd["Command handlers<br/>writes"]
+    Qry["Query handlers<br/>AsNoTracking reads"]
+    Helper["Ownership helper<br/>403 vs 404"]
+  end
+
+  subgraph domain ["EagleBank.Domain"]
+    Model["User / BankAccount / Transaction / Money"]
+  end
+
+  subgraph infra ["EagleBank.Infrastructure"]
+    Ef["EF Core"]
+    Hash["PasswordHasher"]
+    Jwt["JwtTokenService"]
+  end
+
+  Db[("SQLite file<br/>users · accounts · transactions")]
+
+  Client --> Edge --> Ctrl
+  Ctrl --> Cmd
+  Ctrl --> Qry
+  Cmd --> Helper
+  Qry --> Helper
+  Cmd --> Model
+  Cmd --> Ef
+  Qry --> Ef
+  Ef --> Db
+  Hash -.-> Cmd
+  Jwt -.-> Ctrl
+```
+
+Production-only (not drawn in the runtime box): edge rate limiting, SAST/SCA in CI, PostgreSQL swap, optional user-profile cache. No broker and no Redis for balances.
 
 ```text
 HTTP JSON
@@ -357,23 +399,23 @@ No claim that tests passed unless they were run.
 
 ## 17. ADR summary
 
-| ADR | Decision (proposed) | Status |
+| ADR | Decision | Status |
 |---|---|---|
-| ADR-0001 | Clean architecture + controller HTTP boundary | Proposed |
-| ADR-0002 | EF Core 10 + SQLite | Proposed |
-| ADR-0003 | Money value object; persist integer pence | Proposed |
-| ADR-0004 | Single DB transaction + conditional balance update | Proposed |
-| ADR-0005 | Custom JWT + `PasswordHasher<T>`, not ASP.NET Identity | Proposed |
-| ADR-0006 | xUnit + `WebApplicationFactory` + isolated SQLite | Proposed |
-| ADR-0007 | Structured logging on every layer; no PII | Proposed |
-| ADR-0008 | Lightweight CQRS: one command/query handler per use case, one store | Proposed |
-| ADR-0009 | No event-driven architecture | Proposed |
-| ADR-0010 | No application cache in the submission | Proposed |
-| ADR-0011 | Production rate limiting and SAST across the SDLC | Proposed |
+| ADR-0001 | Clean architecture + controller HTTP boundary | Accepted |
+| ADR-0002 | EF Core 10 + SQLite | Accepted |
+| ADR-0003 | Money value object; persist integer pence | Accepted |
+| ADR-0004 | Single DB transaction + conditional balance update | Accepted |
+| ADR-0005 | Custom JWT + `PasswordHasher<T>`, not ASP.NET Identity | Accepted |
+| ADR-0006 | xUnit + `WebApplicationFactory` + isolated SQLite | Accepted |
+| ADR-0007 | Structured logging on every layer; no PII | Accepted |
+| ADR-0008 | Lightweight CQRS: one command/query handler per use case, one store | Accepted |
+| ADR-0009 | No event-driven architecture | Accepted |
+| ADR-0010 | No application cache in the submission | Accepted |
+| ADR-0011 | Production rate limiting and SAST across the SDLC | Accepted |
 
 ## 18. Open design questions
 
-These are implementation defaults if you approve the design as written:
+These defaults were accepted with design approval:
 
 | ID | Question | Proposed default |
 |---|---|---|
@@ -387,4 +429,4 @@ These are implementation defaults if you approve the design as written:
 | DQ-008 | Redis / response caching for production? | Not in this submission. Later: profile reads only, never balance (ADR-0010). |
 | DQ-009 | Rate limiting and SAST in the take-home? | No. Required when productionising (ADR-0011). |
 
-ADRs stay **Proposed** until you approve this design (or change a choice). I have not treated these as user-accepted decisions.
+ADR-0001–ADR-0011 and DQ-001–DQ-009 were accepted with explicit design approval on 2026-09-05.

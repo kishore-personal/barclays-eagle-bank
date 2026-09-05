@@ -1,8 +1,8 @@
 # ADR-0009: Do not implement event-driven architecture
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-05
-- **Decision owners:** Pending user approval of design
+- **Decision owners:** User (explicit design approval)
 - **Related requirements:** REQ-NFR-006, REQ-TXN-016, REQ-DATA-003, REQ-DATA-004, REQ-API-003
 
 ## Context
