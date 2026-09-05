@@ -25,6 +25,8 @@ public sealed class TransactionSteps
             $"/v1/accounts/{CreatedAccountNumber}/transactions",
             UserFixtures.JsonBody(TransactionFixtures.DepositBody(balance)));
         response.EnsureSuccessStatusCode();
+        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        _scenarioContext.Set(document.RootElement.GetProperty("id").GetString()!, "CreatedTransactionId");
     }
 
     [Given("I have deposited {decimal} into that account")]
@@ -48,6 +50,15 @@ public sealed class TransactionSteps
     public async Task WhenIDepositIntoAccount(decimal amount, string accountNumber)
     {
         await PostAsync($"/v1/accounts/{accountNumber}/transactions", TransactionFixtures.DepositBody(amount));
+    }
+
+    [When("I withdraw {decimal} from that account")]
+    public async Task WhenIWithdrawFromThatAccount(decimal amount)
+    {
+        _scenarioContext.Set("withdrawal", "ExpectedTransactionType");
+        await PostAsync(
+            $"/v1/accounts/{CreatedAccountNumber}/transactions",
+            TransactionFixtures.WithdrawalBody(amount));
     }
 
     [When("I deposit {decimal} into the other user's account")]
@@ -98,7 +109,11 @@ public sealed class TransactionSteps
         var id = root.GetProperty("id").GetString();
         Assert.Matches(TransactionIdPattern, id);
         Assert.Equal(Money.GbpCurrency, root.GetProperty("currency").GetString());
-        Assert.Equal("deposit", root.GetProperty("type").GetString());
+        var type = root.GetProperty("type").GetString();
+        var expectedType = _scenarioContext.TryGetValue<string>("ExpectedTransactionType", out var stored)
+            ? stored
+            : "deposit";
+        Assert.Equal(expectedType, type);
         Assert.True(root.TryGetProperty("createdTimestamp", out _));
         Assert.StartsWith("usr-", root.GetProperty("userId").GetString());
         _scenarioContext.Set(id!, "CreatedTransactionId");

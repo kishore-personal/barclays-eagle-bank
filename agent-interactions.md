@@ -667,3 +667,43 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 14:58 — barclays-implement-and-test (TASK-008)
+
+- **User intent:** Continue one approved task at a time; write README and confirm the submitted OpenAPI.
+- **Agent actions actually performed:**
+  - Wrote `README.md` with .NET 10 prerequisites, `dotnet test` / `dotnet run`, create-user, login, Bearer example, SQLite reset, JWT via env or user-secrets.
+  - Documented AI assistance, permissive-only NuGet, no-PII logging, and production follow-ups (rate limiting, SAST/SCA, PostgreSQL, no balance cache) as documentation only.
+  - Confirmed `openapi.yaml` already includes `password`, `POST /v1/auth/login` `{ token }`, and `^tan-[A-Za-z0-9]+$`; tightened the spec info description.
+- **Decisions / outcomes:**
+  - TASK-008 marked `DONE`. MVP MUST remaining is TASK-016 (quality pass). SHOULD next is TASK-009 (withdrawal Gherkin).
+- **Files changed:**
+  - `README.md`
+  - `openapi.yaml` (info description)
+  - `tasks/tasks.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln` — 103 passed, 0 failed.
+- **Workflow transition:** none; implement-and-test remains `IN_PROGRESS`
+- **Approval state:** implementing approved tasks only
+
+---
+
+### 2026-09-05 16:50 — barclays-implement-and-test (TASK-009)
+
+- **User intent:** Continue one approved task at a time; next SHOULD item is withdrawal.
+- **Agent actions actually performed:**
+  - Reused the existing create-transaction handler (`type=withdrawal`); no new service and no GetTransaction edits.
+  - Added Gherkin for sufficient-funds 201 (balance 7.50) and insufficient-funds 422 (balance unchanged; original deposit still fetchable).
+  - Domain already logged `InsufficientFunds` without amounts; denylist extended with withdrawal amounts.
+- **Decisions / outcomes:**
+  - TASK-009 marked `DONE`. TASK-010 not started (one-task increment).
+- **Files changed:**
+  - `tests/EagleBank.Tests` (Transactions.feature, steps, fixtures, apply unit test)
+  - `README.md` (withdrawal now listed as implemented)
+  - `tasks/tasks.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln` — 106 passed, 0 failed.
+- **Workflow transition:** none; implement-and-test remains `IN_PROGRESS`
+- **Approval state:** implementing approved tasks only
+
+---
+

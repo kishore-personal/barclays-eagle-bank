@@ -31,6 +31,19 @@ public class BankAccountApplyTests
     }
 
     [Fact]
+    public void Withdrawal_decreases_balance()
+    {
+        var account = NewAccount();
+        var now = DateTimeOffset.UtcNow;
+        account.Apply(new Transaction("tan-dep1", account.AccountNumber, account.UserId, Money.FromMajorUnits(10.50m), TransactionType.Deposit, null, now));
+
+        account.Apply(new Transaction("tan-wd1", account.AccountNumber, account.UserId, Money.FromMajorUnits(3.00m), TransactionType.Withdrawal, null, now));
+
+        Assert.Equal(750, account.Balance.Pence);
+        Assert.Equal(2, account.Transactions.Count);
+    }
+
+    [Fact]
     public void Withdrawal_without_funds_is_rejected()
     {
         var account = NewAccount();

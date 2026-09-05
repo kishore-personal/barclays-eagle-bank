@@ -20,6 +20,9 @@ public static class LogDenylist
         TransactionFixtures.InvalidAmountText,
         TransactionFixtures.CapAmountText,
         TransactionFixtures.OverCapAmountText,
+        TransactionFixtures.WithdrawalAmountText,
+        TransactionFixtures.RemainingBalanceText,
+        TransactionFixtures.InsufficientAmountText,
         "unknown@example.com",
         "eyJ"
     ];

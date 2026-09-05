@@ -89,3 +89,28 @@ Feature: Transactions
     When I fetch the created account
     Then I receive a 200 response
     And the account balance is 10000.00
+
+  Scenario: Withdrawal with sufficient funds
+    Given I am authenticated as a registered user
+    And I have a personal bank account
+    And that account has a balance of 10.50
+    When I withdraw 3.00 from that account
+    Then I receive a 201 response
+    And the response is a TransactionResponse
+    When I fetch the created account
+    Then I receive a 200 response
+    And the account balance is 7.50
+    And the test log sink contains no denylist PII
+
+  Scenario: Withdrawal with insufficient funds
+    Given I am authenticated as a registered user
+    And I have a personal bank account
+    And that account has a balance of 10.50
+    When I withdraw 50.00 from that account
+    Then I receive a 422 response
+    When I fetch the created account
+    Then I receive a 200 response
+    And the account balance is 10.50
+    When I fetch the created transaction
+    Then I receive a 200 response
+    And the test log sink contains no denylist PII

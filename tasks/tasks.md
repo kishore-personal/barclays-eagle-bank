@@ -322,7 +322,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-008 — README and submitted OpenAPI
 
 - **Priority:** MUST
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Reviewer can run, test, and authenticate; contract includes login.
 - **Requirement references:** REQ-DEL-001–004, REQ-API-007, REQ-NFR-002, REQ-TEST-004
 - **Design / ADR references:** ADR-0005, ADR-0011, ADR-0013 (README: how to run `dotnet test`; production follow-ups stay documentation-only)
@@ -336,14 +336,14 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
   - `openapi.yaml` updated: `password`, `POST /v1/auth/login` `{ "token" }`, transaction id pattern `^tan-[A-Za-z0-9]+$`
 - **Test scope:** None beyond existing suite still green
 - **Verification / definition of done:** README commands are accurate. Spec matches implemented auth. `dotnet test` still passes.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 103 passed, 0 failed. README documents `dotnet test`, `dotnet run`, create-user/login/Bearer, SQLite reset, JWT via env/user-secrets. `openapi.yaml` already had password, login `{ token }`, and `^tan-[A-Za-z0-9]+$`.
 
 ---
 
 ## TASK-009 — Withdrawal
 
 - **Priority:** SHOULD
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Withdrawal with insufficient-funds `422` and unchanged balance.
 - **Requirement references:** REQ-TXN-006, REQ-TXN-007, REQ-TEST-002
 - **Design / ADR references:** ADR-0004, ADR-0013, ADR-0014
@@ -351,7 +351,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 - **Implementation scope:** Same create-transaction handler; `type=withdrawal`; conditional UPDATE `balance_pence >= amount_pence`; Domain logs `InsufficientFunds` reason code only (no amount). SOLID: insufficient-funds lives on the domain account; do not add a `WithdrawalService` or edit GetTransaction.
 - **Test scope:** **Gherkin `Features/Transactions.feature`:** withdrawal with sufficient funds → 201 and lower balance; insufficient funds → 422, no new transaction, same balance; sink has no monetary amounts
 - **Verification / definition of done:** `dotnet test` includes those scenarios.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 106 passed, 0 failed (withdrawal 201 + balance 7.50; insufficient funds 422 + balance still 10.50 and original deposit still fetchable). Same create-transaction handler; no WithdrawalService.
 
 ---
 
