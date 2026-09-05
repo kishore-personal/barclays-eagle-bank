@@ -522,3 +522,28 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 13:38 — barclays-implement-and-test (TASK-002)
+
+- **User intent:** Continue one task at a time with TASK-002 (exception framework, validation, logging).
+- **Agent actions actually performed:**
+  - Added Domain `EagleBankException` subtypes and `InvariantLog`.
+  - Added Application `IExceptionResponseFactory` / `ExceptionResponseFactory` (FluentValidation → 400 + details; unknown → safe 500).
+  - Registered one Api `IExceptionHandler`; request `RequestId` scope; route-template request log; FluentValidation action filter.
+  - Added Infrastructure persist/JWT log helpers; `EfLogging.SensitiveDataLoggingEnabled` is false.
+  - Added Reqnroll `ApiWebApplicationFactory`, hooks, shared HTTP steps, and xUnit factory/handler/layer tests.
+- **Decisions / outcomes:**
+  - TASK-002 marked `DONE`. TASK-003 not started.
+- **Files changed:**
+  - `src/EagleBank.Domain`
+  - `src/EagleBank.Application`
+  - `src/EagleBank.Infrastructure`
+  - `src/EagleBank.Api`
+  - `tests/EagleBank.Tests`
+  - `tasks/tasks.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln` — 14 passed, 0 failed.
+- **Workflow transition:** none; implement-and-test remains `IN_PROGRESS`
+- **Approval state:** implementing approved tasks only
+
+---
+

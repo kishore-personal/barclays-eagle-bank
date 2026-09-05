@@ -180,7 +180,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-002 — API foundations: errors, validation, logging
 
 - **Priority:** MUST
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Shared HTTP error shapes via a **generic injected exception framework**, FluentValidation hook, and PII-safe `ILogger` on **Api, Application, Domain, and Infrastructure**.
 - **Requirement references:** REQ-API-004, REQ-API-005, REQ-ERR-007, REQ-ERR-008, REQ-NFR-003, REQ-TEST-001
 - **Design / ADR references:** ADR-0006, ADR-0007, ADR-0012, ADR-0013, ADR-0014, ADR-0015; design sections 10, 12, and 13
@@ -203,7 +203,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
   - **Unit (xUnit):** factory/handler — each mapped type → correct status and JSON shape; unknown exception → 500 without stack/secrets
   - **Gherkin:** no business features yet; shared steps must compile. PII sink assertion may wait for TASK-004 create-user/login
 - **Verification / definition of done:** New failure modes do not require controller changes. All four layers have logger usage points. Reqnroll host is ready. `dotnet test` passes.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 14 passed, 0 failed (factory mappings, exception handler JSON, layer log helpers, health + RequestId/route-template log).
 
 ---
 
