@@ -210,7 +210,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-003 — Domain Money and EF Core SQLite schema
 
 - **Priority:** MUST
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Persist users, accounts, and transactions with integer pence and migrations.
 - **Requirement references:** REQ-DATA-001, REQ-DATA-002, REQ-NFR-004, REQ-ACCOUNT-013
 - **Design / ADR references:** ADR-0002, ADR-0003, ADR-0006; design sections 6, 8, and 13
@@ -223,7 +223,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
   - Infrastructure persist logging: entity type + outcome only; never SQL parameter values (ADR-0007)
 - **Test scope:** **Unit (xUnit):** Money scale and invalid amounts; EF can create the schema against an isolated SQLite file. No Gherkin in this task.
 - **Verification / definition of done:** `dotnet test` passes. Schema creates without storing amounts as REAL/`double`.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 25 passed, 0 failed. `SqliteSchemaTests` confirmed `accounts.balance_pence` and `transactions.amount_pence` are INTEGER; Money unit tests cover scale/currency/range.
 
 ---
 

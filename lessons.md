@@ -95,3 +95,13 @@ Do not use this file as a diary. Capture lessons that could help another enginee
 - **Related files/tasks/ADRs:** TASK-001, REQ-NFR-001
 
 ---
+
+### LESSON-009 — EF 10 fails Migrate if the snapshot does not match the model
+
+- **Date:** 2026-09-05
+- **Context:** A hand-written `InitialCreate` applied the right SQL, but EF 10 raised `PendingModelChangesWarning` as an error because the snapshot was not an exact model clone.
+- **Lesson:** `Database.Migrate()` validates snapshot vs runtime model. INTEGER pence columns can still be correct while that warning fails the run.
+- **Action / convention:** Keep `RelationalEventId.PendingModelChangesWarning` ignored until a tool-generated snapshot exists; prove money storage with `PRAGMA table_info`.
+- **Related files/tasks/ADRs:** TASK-003, ADR-0002, ADR-0003
+
+---

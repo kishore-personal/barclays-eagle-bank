@@ -10,6 +10,7 @@ public sealed class ApiWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseSetting("SkipMigrations", "true");
         builder.ConfigureLogging(logging =>
         {
             logging.ClearProviders();

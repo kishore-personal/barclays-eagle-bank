@@ -547,3 +547,28 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 13:45 — barclays-implement-and-test (TASK-003)
+
+- **User intent:** Implement TASK-003 only (Money + EF Core SQLite schema).
+- **Agent actions actually performed:**
+  - Added Domain `Money` (GBP, two decimals, integer pence) and User/Account/Transaction aggregates.
+  - Added `EagleBankDbContext`, Fluent configurations (`balance_pence` / `amount_pence` INTEGER), unique email, cascade transactions.
+  - Authored `InitialCreate` migration; Development applies it unless `SkipMigrations=true` (test host).
+  - Persist `SaveChangesAsync` logs entity type + outcome; `EnableSensitiveDataLogging` stays false.
+  - Added Money and isolated SQLite schema tests.
+- **Decisions / outcomes:**
+  - TASK-003 marked `DONE`. TASK-004 not started.
+- **Files changed:**
+  - `src/EagleBank.Domain`
+  - `src/EagleBank.Infrastructure`
+  - `src/EagleBank.Api`
+  - `tests/EagleBank.Tests`
+  - `tasks/tasks.md`
+  - `lessons.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln` — 25 passed, 0 failed.
+- **Workflow transition:** none; implement-and-test remains `IN_PROGRESS`
+- **Approval state:** implementing approved tasks only
+
+---
+
