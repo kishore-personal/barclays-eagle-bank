@@ -437,7 +437,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-015 — Swagger UI for submitted spec
 
 - **Priority:** COULD
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Serve the submitted `openapi.yaml`, not a drifting generated-only spec.
 - **Requirement references:** REQ-API-007 (stretch design item 7)
 - **Design / ADR references:** Design section 14
@@ -445,7 +445,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 - **Implementation scope:** Swagger UI / static file for repo `openapi.yaml`
 - **Test scope:** Optional HTTP assertion that the spec document is reachable
 - **Verification / definition of done:** Documented URL shows the submitted contract including login.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 110 passed, 0 failed. `GET /openapi.yaml` returns the repo file (includes `/v1/auth/login`). `GET /swagger/index.html` returns Swagger UI. README documents `http://localhost:5080/swagger`.
 
 ---
 

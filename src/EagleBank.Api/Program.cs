@@ -2,6 +2,7 @@ using System.Text.Json;
 using EagleBank.Api.Authentication;
 using EagleBank.Api.ExceptionHandling;
 using EagleBank.Api.Middleware;
+using EagleBank.Api.OpenApi;
 using EagleBank.Api.Validation;
 using EagleBank.Application;
 using EagleBank.Infrastructure;
@@ -38,10 +39,18 @@ if (app.Environment.IsDevelopment()
 app.UseMiddleware<RequestContextMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseExceptionHandler();
+app.UseSwaggerUI(options =>
+{
+    options.RoutePrefix = "swagger";
+    options.DocumentTitle = "Eagle Bank";
+    options.SwaggerEndpoint(SubmittedOpenApi.DocumentPath, "Eagle Bank");
+});
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
+app.MapGet(SubmittedOpenApi.DocumentPath, (IWebHostEnvironment environment) =>
+    Results.File(SubmittedOpenApi.ResolveFilePath(environment), "application/yaml", "openapi.yaml"));
 
 app.Run();
 

@@ -34,6 +34,8 @@ dotnet run --project src/EagleBank.Api
 
 The Development profile listens on `http://localhost:5080`. Migrations apply on startup. Check `GET /health`.
 
+Swagger UI is at [http://localhost:5080/swagger](http://localhost:5080/swagger). It loads the submitted [`openapi.yaml`](openapi.yaml) (including login), not a generated spec. The raw file is also at `GET /openapi.yaml`.
+
 ### JWT signing key
 
 Committed `appsettings.json` and `appsettings.Development.json` leave `Jwt:SigningKey` empty. The process will not start without a key of at least 32 characters. Do not commit a real secret.

@@ -8,6 +8,8 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.11" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.7.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.11">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -20,5 +22,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>eagle-bank-api-dev</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\openapi.yaml" Link="openapi.yaml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
 </Project>

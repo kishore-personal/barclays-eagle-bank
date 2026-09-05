@@ -38,4 +38,30 @@ public class HostSmokeTests : IClassFixture<ApiWebApplicationFactory>
         Assert.DoesNotContain("hidden@example.com", logs, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("?email=", logs, StringComparison.OrdinalIgnoreCase);
     }
+
+    [Fact]
+    public async Task Get_submitted_openapi_includes_login()
+    {
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync("/openapi.yaml");
+        var body = await response.Content.ReadAsStringAsync();
+
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        Assert.Contains("/v1/auth/login", body);
+        Assert.Contains("password", body);
+        Assert.DoesNotContain("swagger/v1/swagger.json", body);
+    }
+
+    [Fact]
+    public async Task Get_swagger_ui_is_reachable()
+    {
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync("/swagger/index.html");
+        var body = await response.Content.ReadAsStringAsync();
+
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        Assert.Contains("swagger-ui", body, StringComparison.OrdinalIgnoreCase);
+    }
 }

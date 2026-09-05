@@ -731,3 +731,25 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 17:24 — barclays-implement-and-test (TASK-015)
+
+- **User intent:** Implement Swagger UI for the submitted OpenAPI contract.
+- **Agent actions actually performed:**
+  - Served repo `openapi.yaml` at `GET /openapi.yaml` (resolved from content root / output, not a generated document).
+  - Added Swashbuckle UI at `/swagger` pointing at that file; pinned `Microsoft.OpenApi` 2.7.5 to avoid GHSA-v5pm-xwqc-g5wc.
+  - Documented the URL in the README; added host smoke tests for the spec and UI.
+- **Decisions / outcomes:**
+  - TASK-015 marked `DONE`. Remaining SHOULD/COULD: TASK-010–TASK-014.
+- **Files changed:**
+  - `src/EagleBank.Api` (Program, SubmittedOpenApi, csproj)
+  - `tests/EagleBank.Tests/Unit/HostSmokeTests.cs`
+  - `README.md`
+  - `tasks/tasks.md`
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln` — 110 passed, 0 failed.
+- **Workflow transition:** implement-and-test briefly `IN_PROGRESS` → `COMPLETE`
+- **Approval state:** implementing an approved COULD task on request
+
+---
+
