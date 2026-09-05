@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\EagleBank.Application\EagleBank.Application.csproj" />
+    <ProjectReference Include="..\EagleBank.Infrastructure\EagleBank.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>eagle-bank-api-dev</UserSecretsId>
+  </PropertyGroup>
+
+</Project>

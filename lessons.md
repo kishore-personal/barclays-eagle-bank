@@ -85,3 +85,13 @@ Do not use this file as a diary. Capture lessons that could help another enginee
 - **Related files/tasks/ADRs:** ADR-0015, ADR-0008
 
 ---
+
+### LESSON-008 — .NET 10 `dotnet new sln` defaults to `.slnx`
+
+- **Date:** 2026-09-05
+- **Context:** TASK-001 required `EagleBank.sln`. SDK 10.0.400 created `EagleBank.slnx` instead, so `dotnet sln EagleBank.sln add` failed.
+- **Lesson:** The new XML solution format is the SDK default; reviewers and scripts that look for `.sln` will miss it.
+- **Action / convention:** Create the classic format with `dotnet new sln --format sln` when the task or README names a `.sln` file.
+- **Related files/tasks/ADRs:** TASK-001, REQ-NFR-001
+
+---

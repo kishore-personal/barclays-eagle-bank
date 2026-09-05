@@ -476,3 +476,49 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 13:27 — barclays-tasks (user approval)
+
+- **User intent:** Explicitly approve the implementation task list.
+- **Agent actions actually performed:**
+  - Marked `tasks` as `APPROVED` in `.barclays/workflow-state.md`.
+  - Set current stage to `implement-and-test`.
+  - Did not implement production code.
+- **Decisions / outcomes:**
+  - `tasks/tasks.md` is the approved work breakdown (TASK-001–TASK-016).
+  - `/barclays-implement-and-test` is unlocked. Implementation must follow approved tasks only, one coherent task at a time.
+- **Files changed:**
+  - `.barclays/workflow-state.md`
+  - `agent-interactions.md`
+- **Verification actually run:** None
+- **Workflow transition:** tasks `AWAITING_APPROVAL` → `APPROVED`; current stage `tasks` → `implement-and-test`
+- **Approval state:** tasks explicitly approved by the user
+
+---
+
+### 2026-09-05 13:30 — barclays-implement-and-test (TASK-001)
+
+- **User intent:** Implement and test one approved task at a time, starting with the first MUST item.
+- **Agent actions actually performed:**
+  - Confirmed plan/design/tasks approvals and set implement-and-test to `IN_PROGRESS`.
+  - Created `EagleBank.sln` (classic format; SDK 10 defaulted to `.slnx`) and four src projects plus tests.
+  - Wired DIP project references; added Reqnroll, Reqnroll.xUnit, and Mvc.Testing (no AutoMapper/MediatR).
+  - Replaced template WeatherForecast with `/health`; JWT signing key is empty in committed `appsettings.json` and a development-only placeholder in `appsettings.Development.json`.
+  - Added `HostSmokeTests` and test folders `Features/`, `StepDefinitions/`, `Support/`, `Unit/`.
+  - Updated `.gitignore` for `bin/`, `obj/`, SQLite, and user-secrets leftovers.
+- **Decisions / outcomes:**
+  - TASK-001 marked `DONE`. TASK-002 not started (one-task increment).
+- **Files changed:**
+  - `EagleBank.sln`
+  - `src/EagleBank.*`
+  - `tests/EagleBank.Tests`
+  - `.gitignore`
+  - `tasks/tasks.md`
+  - `.barclays/workflow-state.md`
+  - `lessons.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet build EagleBank.sln` succeeded (0 warnings). `dotnet test EagleBank.sln --no-build` — 1 passed, 0 failed.
+- **Workflow transition:** implement-and-test `NOT_STARTED` → `IN_PROGRESS`
+- **Approval state:** implementing approved tasks only
+
+---
+

@@ -157,7 +157,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-001 — Bootstrap .NET 10 solution
 
 - **Priority:** MUST
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Create the solution and empty projects so `dotnet build` and `dotnet test` succeed.
 - **Requirement references:** REQ-NFR-001, REQ-NFR-002, REQ-TEST-004
 - **Design / ADR references:** ADR-0001, ADR-0006, ADR-0013, ADR-0014, ADR-0015; `design/system-design.md` sections 4 and 13
@@ -173,7 +173,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
   - Update `.gitignore` for `bin/`, `obj/`, SQLite files, user-secrets leftovers
 - **Test scope:** xUnit smoke that the test host starts if practical; otherwise `dotnet build` plus the test project compiling with Reqnroll packages. Feature files may be empty until TASK-002/004.
 - **Verification / definition of done:** `dotnet build` succeeds. `dotnet test` runs the test project (even if only a placeholder).
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet build EagleBank.sln` succeeded (0 warnings, 0 errors). `dotnet test EagleBank.sln --no-build` — 1 passed (`HostSmokeTests.Get_health_returns_ok`).
 
 ---
 

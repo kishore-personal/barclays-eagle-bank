@@ -24,6 +24,23 @@ hs_err_pid*
 # Node
 node_modules/
 
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+artifacts/
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+data/
+
+# User secrets leftovers (store is usually outside the repo)
+secrets.json
+
 # IDE
 .idea/
 *.iml

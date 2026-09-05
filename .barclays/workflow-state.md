@@ -7,10 +7,10 @@
 | init | COMPLETE |
 | plan | APPROVED |
 | design | APPROVED |
-| tasks | AWAITING_APPROVAL |
-| implement-and-test | NOT_STARTED |
+| tasks | APPROVED |
+| implement-and-test | IN_PROGRESS |
 
-**Current stage:** tasks
+**Current stage:** implement-and-test
 
 ## Approval evidence
 
@@ -18,7 +18,7 @@
 |---|---|---|
 | plan | Explicitly approved | User approved the technical requirements in chat on 2026-09-05, including Q-007 (.NET 10) and the documented defaults for Q-001–Q-006. |
 | design | Explicitly approved | User approved the system design (including architecture diagram and ADR-0001–ADR-0011) in chat on 2026-09-05. |
-| tasks | Pending | Task list aligned to OpenAPI, logging, exception framework, Reqnroll, SOLID, and permissive-only NuGet (ADR-0015). Waiting for explicit user approval. |
+| tasks | Explicitly approved | User approved `tasks/tasks.md` in chat on 2026-09-05, including OpenAPI alignment, logging, exception framework (ADR-0012), Reqnroll (ADR-0013), SOLID (ADR-0014), and permissive-only NuGet (ADR-0015). |
 
 ## Notes
 
