@@ -101,6 +101,34 @@ public sealed class TransactionSteps
             $"/v1/accounts/{_scenarioContext.Get<string>("OtherAccountNumber")}/transactions/{transactionId}");
     }
 
+    [When("I list transactions on the created account")]
+    public async Task WhenIListTransactionsOnTheCreatedAccount()
+    {
+        await GetAsync($"/v1/accounts/{CreatedAccountNumber}/transactions");
+    }
+
+    [When(@"I list transactions on account {string}")]
+    public async Task WhenIListTransactionsOnAccount(string accountNumber)
+    {
+        await GetAsync($"/v1/accounts/{accountNumber}/transactions");
+    }
+
+    [When("I list transactions on the other user's account")]
+    public async Task WhenIListTransactionsOnTheOtherUsersAccount()
+    {
+        await GetAsync($"/v1/accounts/{_scenarioContext.Get<string>("OtherAccountNumber")}/transactions");
+    }
+
+    [Then("the created transaction is in the list")]
+    public void ThenTheCreatedTransactionIsInTheList()
+    {
+        using var document = JsonDocument.Parse(Body);
+        var created = CreatedTransactionId;
+        Assert.Contains(
+            document.RootElement.GetProperty("transactions").EnumerateArray(),
+            transaction => transaction.GetProperty("id").GetString() == created);
+    }
+
     [Then("the response is a TransactionResponse")]
     public void ThenTheResponseIsATransactionResponse()
     {

@@ -1,6 +1,8 @@
 using EagleBank.Api.Authentication;
 using EagleBank.Application.Users.CreateUser;
+using EagleBank.Application.Users.DeleteUser;
 using EagleBank.Application.Users.GetUser;
+using EagleBank.Application.Users.UpdateUser;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,11 +15,19 @@ public sealed class UsersController : ControllerBase
 {
     private readonly ICreateUserHandler _createUser;
     private readonly IGetUserHandler _getUser;
+    private readonly IUpdateUserHandler _updateUser;
+    private readonly IDeleteUserHandler _deleteUser;
 
-    public UsersController(ICreateUserHandler createUser, IGetUserHandler getUser)
+    public UsersController(
+        ICreateUserHandler createUser,
+        IGetUserHandler getUser,
+        IUpdateUserHandler updateUser,
+        IDeleteUserHandler deleteUser)
     {
         _createUser = createUser;
         _getUser = getUser;
+        _updateUser = updateUser;
+        _deleteUser = deleteUser;
     }
 
     [HttpPost]
@@ -37,5 +47,26 @@ public sealed class UsersController : ControllerBase
             new GetUserQuery(userId, CallerUser.RequireId(User)),
             cancellationToken);
         return Ok(response);
+    }
+
+    [HttpPatch("{userId}")]
+    public async Task<IActionResult> UpdateUser(
+        string userId,
+        [FromBody] UpdateUserRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await _updateUser.HandleAsync(
+            new UpdateUserCommand(userId, CallerUser.RequireId(User), request),
+            cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpDelete("{userId}")]
+    public async Task<IActionResult> DeleteUser(string userId, CancellationToken cancellationToken)
+    {
+        await _deleteUser.HandleAsync(
+            new DeleteUserCommand(userId, CallerUser.RequireId(User)),
+            cancellationToken);
+        return NoContent();
     }
 }

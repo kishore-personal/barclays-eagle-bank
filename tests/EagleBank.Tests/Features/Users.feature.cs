@@ -105,7 +105,7 @@ namespace EagleBank.Tests.Features
         
         private static global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages InitializeCucumberMessages()
         {
-            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/Users.feature.ndjson", 12);
+            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/Users.feature.ndjson", 24);
         }
         
         async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.InitializeAsync()
@@ -498,6 +498,447 @@ namespace EagleBank.Tests.Features
 #line hidden
 #line 62
     await testRunner.ThenAsync("I receive a 400 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Owner patches their name")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Owner patches their name")]
+        public async global::System.Threading.Tasks.Task OwnerPatchesTheirName()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "10";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Owner patches their name", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 64
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 65
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 66
+    await testRunner.WhenAsync("I patch the authenticated user with name \"Ada Updated\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 67
+    await testRunner.ThenAsync("I receive a 200 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 68
+    await testRunner.AndAsync("the user name is \"Ada Updated\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 69
+    await testRunner.AndAsync("the user response has no password", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 70
+    await testRunner.AndAsync("the test log sink contains no denylist PII", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Patch user without authentication")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Patch user without authentication")]
+        public async global::System.Threading.Tasks.Task PatchUserWithoutAuthentication()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "11";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Patch user without authentication", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 72
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 73
+    await testRunner.GivenAsync("I am not authenticated", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 74
+    await testRunner.WhenAsync("I patch user \"usr-someone1\" with name \"Ada Updated\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 75
+    await testRunner.ThenAsync("I receive a 401 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Patch another existing user")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Patch another existing user")]
+        public async global::System.Threading.Tasks.Task PatchAnotherExistingUser()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "12";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Patch another existing user", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 77
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 78
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 79
+    await testRunner.AndAsync("another registered user exists", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 80
+    await testRunner.WhenAsync("I patch the other existing user with name \"Ada Updated\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 81
+    await testRunner.ThenAsync("I receive a 403 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Patch unknown user")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Patch unknown user")]
+        public async global::System.Threading.Tasks.Task PatchUnknownUser()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "13";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Patch unknown user", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 83
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 84
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 85
+    await testRunner.WhenAsync("I patch user \"usr-doesnotexist99\" with name \"Ada Updated\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 86
+    await testRunner.ThenAsync("I receive a 404 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Patch with a bad userId")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Patch with a bad userId")]
+        public async global::System.Threading.Tasks.Task PatchWithABadUserId()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "14";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Patch with a bad userId", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 88
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 89
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 90
+    await testRunner.WhenAsync("I patch user \"not-a-valid-id\" with name \"Ada Updated\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 91
+    await testRunner.ThenAsync("I receive a 400 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Patch with an invalid phone number")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Patch with an invalid phone number")]
+        public async global::System.Threading.Tasks.Task PatchWithAnInvalidPhoneNumber()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "15";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Patch with an invalid phone number", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 93
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 94
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 95
+    await testRunner.WhenAsync("I patch the authenticated user with phone number \"012345\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 96
+    await testRunner.ThenAsync("I receive a 400 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Patch with a duplicate email")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Patch with a duplicate email")]
+        public async global::System.Threading.Tasks.Task PatchWithADuplicateEmail()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "16";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Patch with a duplicate email", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 98
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 99
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 100
+    await testRunner.AndAsync("another registered user exists", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 101
+    await testRunner.WhenAsync("I patch the authenticated user with the other user\'s email", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 102
+    await testRunner.ThenAsync("I receive a 400 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 103
+    await testRunner.AndAsync("the response is a BadRequestErrorResponse", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Owner deletes themselves when they have no accounts")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Owner deletes themselves when they have no accounts")]
+        public async global::System.Threading.Tasks.Task OwnerDeletesThemselvesWhenTheyHaveNoAccounts()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "17";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Owner deletes themselves when they have no accounts", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 105
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 106
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 107
+    await testRunner.WhenAsync("I delete the authenticated user", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 108
+    await testRunner.ThenAsync("I receive a 204 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 109
+    await testRunner.WhenAsync("I fetch the authenticated user", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 110
+    await testRunner.ThenAsync("I receive a 404 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 111
+    await testRunner.AndAsync("the test log sink contains no denylist PII", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Owner cannot delete themselves while they have an account")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Owner cannot delete themselves while they have an account")]
+        public async global::System.Threading.Tasks.Task OwnerCannotDeleteThemselvesWhileTheyHaveAnAccount()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "18";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Owner cannot delete themselves while they have an account", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 113
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 114
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 115
+    await testRunner.AndAsync("I have a personal bank account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 116
+    await testRunner.WhenAsync("I delete the authenticated user", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 117
+    await testRunner.ThenAsync("I receive a 409 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Delete user without authentication")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Delete user without authentication")]
+        public async global::System.Threading.Tasks.Task DeleteUserWithoutAuthentication()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "19";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Delete user without authentication", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 119
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 120
+    await testRunner.GivenAsync("I am not authenticated", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 121
+    await testRunner.WhenAsync("I delete user \"usr-someone1\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 122
+    await testRunner.ThenAsync("I receive a 401 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Delete another existing user")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Delete another existing user")]
+        public async global::System.Threading.Tasks.Task DeleteAnotherExistingUser()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "20";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Delete another existing user", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 124
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 125
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 126
+    await testRunner.AndAsync("another registered user exists", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 127
+    await testRunner.WhenAsync("I delete the other existing user", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 128
+    await testRunner.ThenAsync("I receive a 403 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Delete unknown user")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Users")]
+        [global::Xunit.TraitAttribute("Description", "Delete unknown user")]
+        public async global::System.Threading.Tasks.Task DeleteUnknownUser()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "21";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Delete unknown user", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 130
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 131
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 132
+    await testRunner.WhenAsync("I delete user \"usr-doesnotexist99\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 133
+    await testRunner.ThenAsync("I receive a 404 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

@@ -105,7 +105,7 @@ namespace EagleBank.Tests.Features
         
         private static global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages InitializeCucumberMessages()
         {
-            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/Transactions.feature.ndjson", 17);
+            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/Transactions.feature.ndjson", 23);
         }
         
         async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.InitializeAsync()
@@ -702,15 +702,15 @@ namespace EagleBank.Tests.Features
             await this.ScenarioCleanupAsync();
         }
         
-        [global::Xunit.SkippableFactAttribute(DisplayName="Withdrawal with insufficient funds")]
+        [global::Xunit.SkippableFactAttribute(DisplayName="List own transactions")]
         [global::Xunit.TraitAttribute("FeatureTitle", "Transactions")]
-        [global::Xunit.TraitAttribute("Description", "Withdrawal with insufficient funds")]
-        public async global::System.Threading.Tasks.Task WithdrawalWithInsufficientFunds()
+        [global::Xunit.TraitAttribute("Description", "List own transactions")]
+        public async global::System.Threading.Tasks.Task ListOwnTransactions()
         {
             string[] tagsOfScenario = ((string[])(null));
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             string pickleIndex = "14";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Withdrawal with insufficient funds", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("List own transactions", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
 #line 105
@@ -730,30 +730,264 @@ namespace EagleBank.Tests.Features
     await testRunner.AndAsync("I have a personal bank account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 108
-    await testRunner.AndAsync("that account has a balance of 10.50", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+    await testRunner.AndAsync("I have deposited 10.50 into that account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 109
-    await testRunner.WhenAsync("I withdraw 50.00 from that account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+    await testRunner.WhenAsync("I list transactions on the created account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 110
-    await testRunner.ThenAsync("I receive a 422 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+    await testRunner.ThenAsync("I receive a 200 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 111
-    await testRunner.WhenAsync("I fetch the created account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+    await testRunner.AndAsync("the created transaction is in the list", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 112
-    await testRunner.ThenAsync("I receive a 200 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+    await testRunner.AndAsync("the test log sink contains no denylist PII", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 113
-    await testRunner.AndAsync("the account balance is 10.50", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="List transactions without authentication")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Transactions")]
+        [global::Xunit.TraitAttribute("Description", "List transactions without authentication")]
+        public async global::System.Threading.Tasks.Task ListTransactionsWithoutAuthentication()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "15";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("List transactions without authentication", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
 #line 114
-    await testRunner.WhenAsync("I fetch the created transaction", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
 #line 115
-    await testRunner.ThenAsync("I receive a 200 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+    await testRunner.GivenAsync("I am not authenticated", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 116
+    await testRunner.WhenAsync("I list transactions on account \"01234567\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 117
+    await testRunner.ThenAsync("I receive a 401 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="List transactions with a bad accountNumber")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Transactions")]
+        [global::Xunit.TraitAttribute("Description", "List transactions with a bad accountNumber")]
+        public async global::System.Threading.Tasks.Task ListTransactionsWithABadAccountNumber()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "16";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("List transactions with a bad accountNumber", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 119
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 120
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 121
+    await testRunner.WhenAsync("I list transactions on account \"not-an-account\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 122
+    await testRunner.ThenAsync("I receive a 400 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="List transactions on another user\'s account")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Transactions")]
+        [global::Xunit.TraitAttribute("Description", "List transactions on another user\'s account")]
+        public async global::System.Threading.Tasks.Task ListTransactionsOnAnotherUsersAccount()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "17";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("List transactions on another user\'s account", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 124
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 125
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 126
+    await testRunner.AndAsync("another registered user exists", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 127
+    await testRunner.AndAsync("the other user has a personal bank account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 128
+    await testRunner.WhenAsync("I list transactions on the other user\'s account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 129
+    await testRunner.ThenAsync("I receive a 403 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="List transactions on a missing account")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Transactions")]
+        [global::Xunit.TraitAttribute("Description", "List transactions on a missing account")]
+        public async global::System.Threading.Tasks.Task ListTransactionsOnAMissingAccount()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "18";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("List transactions on a missing account", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 131
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 132
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 133
+    await testRunner.WhenAsync("I list transactions on account \"01999999\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 134
+    await testRunner.ThenAsync("I receive a 404 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Deleted account transactions are not visible")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Transactions")]
+        [global::Xunit.TraitAttribute("Description", "Deleted account transactions are not visible")]
+        public async global::System.Threading.Tasks.Task DeletedAccountTransactionsAreNotVisible()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "19";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Deleted account transactions are not visible", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 136
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 137
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 138
+    await testRunner.AndAsync("I have a personal bank account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 139
+    await testRunner.AndAsync("I have deposited 10.50 into that account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 140
+    await testRunner.WhenAsync("I delete the created account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 141
+    await testRunner.ThenAsync("I receive a 204 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 142
+    await testRunner.WhenAsync("I fetch the created transaction", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 143
+    await testRunner.ThenAsync("I receive a 404 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Withdrawal with insufficient funds")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Transactions")]
+        [global::Xunit.TraitAttribute("Description", "Withdrawal with insufficient funds")]
+        public async global::System.Threading.Tasks.Task WithdrawalWithInsufficientFunds()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "20";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Withdrawal with insufficient funds", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 145
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 146
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 147
+    await testRunner.AndAsync("I have a personal bank account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 148
+    await testRunner.AndAsync("that account has a balance of 10.50", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 149
+    await testRunner.WhenAsync("I withdraw 50.00 from that account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 150
+    await testRunner.ThenAsync("I receive a 422 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 151
+    await testRunner.WhenAsync("I fetch the created account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 152
+    await testRunner.ThenAsync("I receive a 200 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 153
+    await testRunner.AndAsync("the account balance is 10.50", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 154
+    await testRunner.WhenAsync("I fetch the created transaction", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 155
+    await testRunner.ThenAsync("I receive a 200 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 156
     await testRunner.AndAsync("the test log sink contains no denylist PII", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }

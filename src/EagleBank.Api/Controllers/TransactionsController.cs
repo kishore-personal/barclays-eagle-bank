@@ -1,6 +1,7 @@
 using EagleBank.Api.Authentication;
 using EagleBank.Application.Transactions.CreateTransaction;
 using EagleBank.Application.Transactions.GetTransaction;
+using EagleBank.Application.Transactions.ListTransactions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,13 +14,16 @@ public sealed class TransactionsController : ControllerBase
 {
     private readonly ICreateTransactionHandler _createTransaction;
     private readonly IGetTransactionHandler _getTransaction;
+    private readonly IListTransactionsHandler _listTransactions;
 
     public TransactionsController(
         ICreateTransactionHandler createTransaction,
-        IGetTransactionHandler getTransaction)
+        IGetTransactionHandler getTransaction,
+        IListTransactionsHandler listTransactions)
     {
         _createTransaction = createTransaction;
         _getTransaction = getTransaction;
+        _listTransactions = listTransactions;
     }
 
     [HttpPost]
@@ -32,6 +36,15 @@ public sealed class TransactionsController : ControllerBase
             new CreateTransactionCommand(accountNumber, CallerUser.RequireId(User), request),
             cancellationToken);
         return StatusCode(StatusCodes.Status201Created, response);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ListTransactions(string accountNumber, CancellationToken cancellationToken)
+    {
+        var response = await _listTransactions.HandleAsync(
+            new ListTransactionsQuery(accountNumber, CallerUser.RequireId(User)),
+            cancellationToken);
+        return Ok(response);
     }
 
     [HttpGet("{transactionId}")]

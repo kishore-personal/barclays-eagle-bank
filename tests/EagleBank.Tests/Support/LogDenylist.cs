@@ -14,6 +14,8 @@ public static class LogDenylist
         UserFixtures.Password,
         UserFixtures.Line1,
         UserFixtures.Name,
+        "Ada Updated",
+        "Holiday Account",
         AccountFixtures.Name,
         TransactionFixtures.Reference,
         TransactionFixtures.DepositAmountText,

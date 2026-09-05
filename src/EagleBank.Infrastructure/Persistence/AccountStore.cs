@@ -46,6 +46,42 @@ public sealed class AccountStore : IAccountStore
             .SingleOrDefaultAsync(account => account.AccountNumber == accountNumber, cancellationToken);
     }
 
+    public async Task<IReadOnlyList<BankAccount>> ListByUserIdAsync(
+        string userId,
+        CancellationToken cancellationToken)
+    {
+        var accounts = await _db.Accounts
+            .AsNoTracking()
+            .Where(account => account.UserId == userId)
+            .ToListAsync(cancellationToken);
+        return accounts
+            .OrderBy(account => account.CreatedTimestamp)
+            .ToArray();
+    }
+
+    public Task<bool> HasAnyForUserAsync(string userId, CancellationToken cancellationToken)
+    {
+        return _db.Accounts.AnyAsync(account => account.UserId == userId, cancellationToken);
+    }
+
+    public async Task UpdateAsync(BankAccount account, CancellationToken cancellationToken)
+    {
+        _db.Accounts.Update(account);
+        await _db.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(string accountNumber, CancellationToken cancellationToken)
+    {
+        await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
+        await _db.Transactions
+            .Where(item => item.AccountNumber == accountNumber)
+            .ExecuteDeleteAsync(cancellationToken);
+        await _db.Accounts
+            .Where(account => account.AccountNumber == accountNumber)
+            .ExecuteDeleteAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+    }
+
     private static bool IsUniqueConstraint(DbUpdateException exception)
     {
         return exception.InnerException is SqliteException sqlite && sqlite.SqliteErrorCode == 19;

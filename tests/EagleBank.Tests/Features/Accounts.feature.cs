@@ -105,7 +105,7 @@ namespace EagleBank.Tests.Features
         
         private static global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages InitializeCucumberMessages()
         {
-            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/Accounts.feature.ndjson", 10);
+            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/Accounts.feature.ndjson", 21);
         }
         
         async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.InitializeAsync()
@@ -421,6 +421,431 @@ namespace EagleBank.Tests.Features
 #line hidden
 #line 49
     await testRunner.ThenAsync("I receive a 400 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="List own accounts")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Accounts")]
+        [global::Xunit.TraitAttribute("Description", "List own accounts")]
+        public async global::System.Threading.Tasks.Task ListOwnAccounts()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "8";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("List own accounts", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 51
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 52
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 53
+    await testRunner.AndAsync("I have a personal bank account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 54
+    await testRunner.AndAsync("another registered user exists", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 55
+    await testRunner.AndAsync("the other user has a personal bank account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 56
+    await testRunner.WhenAsync("I list my accounts", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 57
+    await testRunner.ThenAsync("I receive a 200 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 58
+    await testRunner.AndAsync("the response is a list of the caller\'s accounts", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 59
+    await testRunner.AndAsync("the other user\'s account is not in the list", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 60
+    await testRunner.AndAsync("the test log sink contains no denylist PII", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="List accounts without authentication")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Accounts")]
+        [global::Xunit.TraitAttribute("Description", "List accounts without authentication")]
+        public async global::System.Threading.Tasks.Task ListAccountsWithoutAuthentication()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "9";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("List accounts without authentication", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 62
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 63
+    await testRunner.GivenAsync("I am not authenticated", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 64
+    await testRunner.WhenAsync("I list my accounts", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 65
+    await testRunner.ThenAsync("I receive a 401 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Owner patches account name")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Accounts")]
+        [global::Xunit.TraitAttribute("Description", "Owner patches account name")]
+        public async global::System.Threading.Tasks.Task OwnerPatchesAccountName()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "10";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Owner patches account name", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 67
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 68
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 69
+    await testRunner.AndAsync("I have a personal bank account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 70
+    await testRunner.WhenAsync("I patch the created account with name \"Holiday Account\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 71
+    await testRunner.ThenAsync("I receive a 200 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 72
+    await testRunner.AndAsync("the account name is \"Holiday Account\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 73
+    await testRunner.AndAsync("the test log sink contains no denylist PII", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Patch account without authentication")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Accounts")]
+        [global::Xunit.TraitAttribute("Description", "Patch account without authentication")]
+        public async global::System.Threading.Tasks.Task PatchAccountWithoutAuthentication()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "11";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Patch account without authentication", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 75
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 76
+    await testRunner.GivenAsync("I am not authenticated", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 77
+    await testRunner.WhenAsync("I patch account \"01234567\" with name \"Holiday Account\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 78
+    await testRunner.ThenAsync("I receive a 401 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Patch another user\'s account")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Accounts")]
+        [global::Xunit.TraitAttribute("Description", "Patch another user\'s account")]
+        public async global::System.Threading.Tasks.Task PatchAnotherUsersAccount()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "12";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Patch another user\'s account", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 80
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 81
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 82
+    await testRunner.AndAsync("another registered user exists", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 83
+    await testRunner.AndAsync("the other user has a personal bank account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 84
+    await testRunner.WhenAsync("I patch the other user\'s account with name \"Holiday Account\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 85
+    await testRunner.ThenAsync("I receive a 403 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Patch unknown account")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Accounts")]
+        [global::Xunit.TraitAttribute("Description", "Patch unknown account")]
+        public async global::System.Threading.Tasks.Task PatchUnknownAccount()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "13";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Patch unknown account", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 87
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 88
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 89
+    await testRunner.WhenAsync("I patch account \"01999999\" with name \"Holiday Account\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 90
+    await testRunner.ThenAsync("I receive a 404 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Patch with a bad accountNumber")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Accounts")]
+        [global::Xunit.TraitAttribute("Description", "Patch with a bad accountNumber")]
+        public async global::System.Threading.Tasks.Task PatchWithABadAccountNumber()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "14";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Patch with a bad accountNumber", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 92
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 93
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 94
+    await testRunner.WhenAsync("I patch account \"not-an-account\" with name \"Holiday Account\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 95
+    await testRunner.ThenAsync("I receive a 400 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Owner deletes their account")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Accounts")]
+        [global::Xunit.TraitAttribute("Description", "Owner deletes their account")]
+        public async global::System.Threading.Tasks.Task OwnerDeletesTheirAccount()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "15";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Owner deletes their account", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 97
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 98
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 99
+    await testRunner.AndAsync("I have a personal bank account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 100
+    await testRunner.WhenAsync("I delete the created account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 101
+    await testRunner.ThenAsync("I receive a 204 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 102
+    await testRunner.WhenAsync("I fetch the created account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 103
+    await testRunner.ThenAsync("I receive a 404 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 104
+    await testRunner.AndAsync("the test log sink contains no denylist PII", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Delete account without authentication")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Accounts")]
+        [global::Xunit.TraitAttribute("Description", "Delete account without authentication")]
+        public async global::System.Threading.Tasks.Task DeleteAccountWithoutAuthentication()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "16";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Delete account without authentication", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 106
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 107
+    await testRunner.GivenAsync("I am not authenticated", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 108
+    await testRunner.WhenAsync("I delete account \"01234567\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 109
+    await testRunner.ThenAsync("I receive a 401 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Delete another user\'s account")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Accounts")]
+        [global::Xunit.TraitAttribute("Description", "Delete another user\'s account")]
+        public async global::System.Threading.Tasks.Task DeleteAnotherUsersAccount()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "17";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Delete another user\'s account", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 111
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 112
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 113
+    await testRunner.AndAsync("another registered user exists", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 114
+    await testRunner.AndAsync("the other user has a personal bank account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 115
+    await testRunner.WhenAsync("I delete the other user\'s account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 116
+    await testRunner.ThenAsync("I receive a 403 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.SkippableFactAttribute(DisplayName="Delete unknown account")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Accounts")]
+        [global::Xunit.TraitAttribute("Description", "Delete unknown account")]
+        public async global::System.Threading.Tasks.Task DeleteUnknownAccount()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "18";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Delete unknown account", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 118
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 119
+    await testRunner.GivenAsync("I am authenticated as a registered user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 120
+    await testRunner.WhenAsync("I delete account \"01999999\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 121
+    await testRunner.ThenAsync("I receive a 404 response", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

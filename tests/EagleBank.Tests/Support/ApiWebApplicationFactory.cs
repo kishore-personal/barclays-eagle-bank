@@ -59,10 +59,15 @@ public sealed class ApiWebApplicationFactory : WebApplicationFactory<Program>
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        SqliteConnection.ClearAllPools();
         if (File.Exists(_databasePath))
         {
-            File.Delete(_databasePath);
+            try
+            {
+                File.Delete(_databasePath);
+            }
+            catch (IOException)
+            {
+            }
         }
     }
 }

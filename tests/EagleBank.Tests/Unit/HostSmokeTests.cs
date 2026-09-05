@@ -54,7 +54,7 @@ public class HostSmokeTests : IClassFixture<ApiWebApplicationFactory>
         Assert.Contains("/v1/auth/login", body);
         Assert.Contains("password", body);
         Assert.Contains("Implemented in this repository", body);
-        Assert.Contains("not wired", body, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("PATCH", body);
         Assert.DoesNotContain("swagger/v1/swagger.json", body);
     }
 
@@ -69,7 +69,7 @@ public class HostSmokeTests : IClassFixture<ApiWebApplicationFactory>
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         Assert.Contains("swagger-ui", body, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("Wired in this repository", body);
-        Assert.Contains("not wired", body, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("PATCH", body, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

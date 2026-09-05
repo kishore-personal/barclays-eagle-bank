@@ -102,6 +102,46 @@ Feature: Transactions
     And the account balance is 7.50
     And the test log sink contains no denylist PII
 
+  Scenario: List own transactions
+    Given I am authenticated as a registered user
+    And I have a personal bank account
+    And I have deposited 10.50 into that account
+    When I list transactions on the created account
+    Then I receive a 200 response
+    And the created transaction is in the list
+    And the test log sink contains no denylist PII
+
+  Scenario: List transactions without authentication
+    Given I am not authenticated
+    When I list transactions on account "01234567"
+    Then I receive a 401 response
+
+  Scenario: List transactions with a bad accountNumber
+    Given I am authenticated as a registered user
+    When I list transactions on account "not-an-account"
+    Then I receive a 400 response
+
+  Scenario: List transactions on another user's account
+    Given I am authenticated as a registered user
+    And another registered user exists
+    And the other user has a personal bank account
+    When I list transactions on the other user's account
+    Then I receive a 403 response
+
+  Scenario: List transactions on a missing account
+    Given I am authenticated as a registered user
+    When I list transactions on account "01999999"
+    Then I receive a 404 response
+
+  Scenario: Deleted account transactions are not visible
+    Given I am authenticated as a registered user
+    And I have a personal bank account
+    And I have deposited 10.50 into that account
+    When I delete the created account
+    Then I receive a 204 response
+    When I fetch the created transaction
+    Then I receive a 404 response
+
   Scenario: Withdrawal with insufficient funds
     Given I am authenticated as a registered user
     And I have a personal bank account

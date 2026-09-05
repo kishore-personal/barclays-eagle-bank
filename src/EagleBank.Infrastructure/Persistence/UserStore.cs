@@ -41,6 +41,26 @@ public sealed class UserStore : IUserStore
         }
     }
 
+    public async Task UpdateAsync(User user, CancellationToken cancellationToken)
+    {
+        _db.Users.Update(user);
+        try
+        {
+            await _db.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception) when (IsUniqueConstraint(exception))
+        {
+            throw new ValidationException([
+                new ValidationFailure("email", "Email is already registered.") { ErrorCode = "Duplicate" }
+            ]);
+        }
+    }
+
+    public async Task DeleteAsync(string userId, CancellationToken cancellationToken)
+    {
+        await _db.Users.Where(user => user.Id == userId).ExecuteDeleteAsync(cancellationToken);
+    }
+
     private static bool IsUniqueConstraint(DbUpdateException exception)
     {
         return exception.InnerException is SqliteException sqlite && sqlite.SqliteErrorCode == 19;

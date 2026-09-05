@@ -43,4 +43,34 @@ public sealed class User
         CreatedTimestamp = createdTimestamp;
         UpdatedTimestamp = updatedTimestamp;
     }
+
+    public void ApplyPartialUpdate(
+        string? name,
+        Address? address,
+        string? phoneNumber,
+        string? email,
+        DateTimeOffset updatedTimestamp)
+    {
+        if (name is not null)
+        {
+            Name = name;
+        }
+
+        if (address is not null)
+        {
+            Address = address;
+        }
+
+        if (phoneNumber is not null)
+        {
+            PhoneNumber = phoneNumber;
+        }
+
+        if (email is not null)
+        {
+            Email = email;
+        }
+
+        UpdatedTimestamp = updatedTimestamp;
+    }
 }

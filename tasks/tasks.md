@@ -358,7 +358,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-010 — List accounts and list transactions
 
 - **Priority:** SHOULD
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Collection GETs return only the caller's data.
 - **Requirement references:** REQ-ACCOUNT-006, REQ-TXN-010
 - **Design / ADR references:** ADR-0008, ADR-0013, ADR-0014
@@ -370,14 +370,14 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
   - SOLID: `ListAccountsQuery` and `ListTransactionsQuery` are new handlers; do not add list methods onto create/get handlers
 - **Test scope:** **Gherkin:** `Features/Accounts.feature` list accounts → 200 (only caller) and 401; `Features/Transactions.feature` list transactions → 200 / 400 / 401 / 403 / 404; sink has no account numbers
 - **Verification / definition of done:** `dotnet test` passes for those scenarios.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 170 passed, 0 failed. List accounts is caller-only (`200`/`401`). List transactions covers `200`/`400`/`401`/`403`/`404`. SQLite cannot `ORDER BY` `DateTimeOffset` in LINQ; lists are ordered in memory.
 
 ---
 
 ## TASK-011 — PATCH user and account
 
 - **Priority:** SHOULD
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Partial updates for owner only.
 - **Requirement references:** REQ-USER-009, REQ-USER-010, REQ-ACCOUNT-010
 - **Design / ADR references:** A-003 (PATCH is partial), ADR-0013, ADR-0014
@@ -385,14 +385,14 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 - **Implementation scope:** `UpdateUserCommand`, `UpdateAccountCommand` as **new** handlers (do not edit Create/Get). Cannot change ids, balance, sortCode, ownership; `updatedTimestamp` changes; 401 if no/invalid JWT; log result codes only (no email, name, or account name). SOLID: OCP — PATCH is additive files.
 - **Test scope:** **Gherkin:** `Features/Users.feature` PATCH own → 200; 401; 403 other; 404 missing; 400 bad path or invalid body; 400 duplicate email. `Features/Accounts.feature` PATCH own → 200; 401; 403; 404; 400. Sink has no email/name
 - **Verification / definition of done:** `dotnet test` passes for those scenarios.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 170 passed, 0 failed. New `UpdateUser` / `UpdateAccount` handlers; create/get handlers unchanged.
 
 ---
 
 ## TASK-012 — DELETE user and account
 
 - **Priority:** SHOULD
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Delete user only with no accounts; delete account and hide its transactions.
 - **Requirement references:** REQ-USER-011–013, REQ-ACCOUNT-011, REQ-DATA-005, REQ-DATA-006, REQ-TEST-003, A-010
 - **Design / ADR references:** Cascade transactions on account delete; ADR-0013, ADR-0014
@@ -400,7 +400,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 - **Implementation scope:** `DeleteUserCommand` and `DeleteAccountCommand` as **new** handlers (do not edit Create/Get/Update). 204 / 409 if user still has accounts / 400 bad id / 401 / 403 / 404; account delete 204 (even with balance or transactions) / 400 / 401 / 403 / 404 — **no account-delete 409**; log `Conflict`/`NotFound` result codes only. SOLID: OCP — DELETE is additive files.
 - **Test scope:** **Gherkin:** `Features/Users.feature` DELETE own with no accounts → 204; own with accounts → 409; 401; 403; 404. `Features/Accounts.feature` DELETE own → 204 then GET 404; 401; 403; 404; optional 400 bad `accountNumber`. Sink has no email or account number
 - **Verification / definition of done:** `dotnet test` passes for those scenarios.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 170 passed, 0 failed. User delete `204`/`409`; account delete `204` then GET account and its transactions `404`.
 
 ---
 
@@ -422,7 +422,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-014 — Docker Compose
 
 - **Priority:** COULD
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** One-command run for reviewers with Docker.
 - **Requirement references:** REQ-NFR-002 (stretch design item 6)
 - **Design / ADR references:** Design section 15
@@ -430,7 +430,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 - **Implementation scope:** Dockerfile + compose; JWT secret required via env; no hidden default secret
 - **Test scope:** Document how to verify; do not claim Docker works unless the image was built and run
 - **Verification / definition of done:** Image builds and serves create-user or `/health` if that endpoint exists.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `docker compose up --build -d` with `Jwt__SigningKey` set. `GET http://localhost:5080/health` → `200` `{"status":"ok"}`. `GET /swagger/index.html` → `200`. No default JWT in image or Compose. `docker compose down` afterwards.
 
 ---
 

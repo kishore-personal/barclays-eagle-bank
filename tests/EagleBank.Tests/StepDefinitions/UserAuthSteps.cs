@@ -153,6 +153,64 @@ public sealed class UserAuthSteps
         Assert.False(root.TryGetProperty("passwordHash", out _));
     }
 
+    [When("I patch the authenticated user with name {string}")]
+    public async Task WhenIPatchTheAuthenticatedUserWithName(string name)
+    {
+        await PatchAsync($"/v1/users/{_scenarioContext.Get<string>("AuthenticatedUserId")}", new { name });
+    }
+
+    [When(@"I patch user {string} with name {string}")]
+    public async Task WhenIPatchUserWithName(string userId, string name)
+    {
+        await PatchAsync($"/v1/users/{userId}", new { name });
+    }
+
+    [When("I patch the other existing user with name {string}")]
+    public async Task WhenIPatchTheOtherExistingUserWithName(string name)
+    {
+        await PatchAsync($"/v1/users/{_scenarioContext.Get<string>("OtherUserId")}", new { name });
+    }
+
+    [When("I patch the authenticated user with phone number {string}")]
+    public async Task WhenIPatchTheAuthenticatedUserWithPhoneNumber(string phoneNumber)
+    {
+        await PatchAsync($"/v1/users/{_scenarioContext.Get<string>("AuthenticatedUserId")}", new { phoneNumber });
+    }
+
+    [When("I patch the authenticated user with the other user's email")]
+    public async Task WhenIPatchTheAuthenticatedUserWithTheOtherUsersEmail()
+    {
+        await PatchAsync(
+            $"/v1/users/{_scenarioContext.Get<string>("AuthenticatedUserId")}",
+            new { email = UserFixtures.OtherEmail });
+    }
+
+    [When("I delete the authenticated user")]
+    public async Task WhenIDeleteTheAuthenticatedUser()
+    {
+        await DeleteAsync($"/v1/users/{_scenarioContext.Get<string>("AuthenticatedUserId")}");
+    }
+
+    [When(@"I delete user {string}")]
+    public async Task WhenIDeleteUser(string userId)
+    {
+        await DeleteAsync($"/v1/users/{userId}");
+    }
+
+    [When("I delete the other existing user")]
+    public async Task WhenIDeleteTheOtherExistingUser()
+    {
+        await DeleteAsync($"/v1/users/{_scenarioContext.Get<string>("OtherUserId")}");
+    }
+
+    [Then("the user name is {string}")]
+    public void ThenTheUserNameIs(string name)
+    {
+        using var document = JsonDocument.Parse(Body);
+        Assert.Equal(name, document.RootElement.GetProperty("name").GetString());
+        Assert.False(document.RootElement.TryGetProperty("password", out _));
+    }
+
     [Then("the user response has no password")]
     public void ThenTheUserResponseHasNoPassword()
     {
@@ -186,6 +244,18 @@ public sealed class UserAuthSteps
     private async Task GetAsync(string path)
     {
         var response = await Client.GetAsync(path);
+        StoreResponse(response, await response.Content.ReadAsStringAsync());
+    }
+
+    private async Task PatchAsync(string path, object body)
+    {
+        var response = await Client.PatchAsync(path, UserFixtures.JsonBody(body));
+        StoreResponse(response, await response.Content.ReadAsStringAsync());
+    }
+
+    private async Task DeleteAsync(string path)
+    {
+        var response = await Client.DeleteAsync(path);
         StoreResponse(response, await response.Content.ReadAsStringAsync());
     }
 

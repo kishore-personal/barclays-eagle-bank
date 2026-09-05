@@ -41,6 +41,19 @@ public sealed class TransactionStore : ITransactionStore
             .SingleOrDefaultAsync(transaction => transaction.Id == transactionId, cancellationToken);
     }
 
+    public async Task<IReadOnlyList<Transaction>> ListByAccountNumberAsync(
+        string accountNumber,
+        CancellationToken cancellationToken)
+    {
+        var transactions = await _db.Transactions
+            .AsNoTracking()
+            .Where(transaction => transaction.AccountNumber == accountNumber)
+            .ToListAsync(cancellationToken);
+        return transactions
+            .OrderBy(transaction => transaction.CreatedTimestamp)
+            .ToArray();
+    }
+
     private Task<int> TryDepositAsync(Transaction transaction, CancellationToken cancellationToken)
     {
         return _db.Database.ExecuteSqlInterpolatedAsync(

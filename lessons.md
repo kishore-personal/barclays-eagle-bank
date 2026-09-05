@@ -145,3 +145,13 @@ Do not use this file as a diary. Capture lessons that could help another enginee
 - **Related files/tasks/ADRs:** ADR-0007, `TestLogSink.cs`, TASK-013 follow-up
 
 ---
+
+### LESSON-014 — Do not `ORDER BY` DateTimeOffset in SQLite LINQ
+
+- **Date:** 2026-09-05
+- **Context:** `ListByUserIdAsync` used `OrderBy(account => account.CreatedTimestamp)` and EF threw `NotSupportedException` (`GET /v1/accounts` → `500`).
+- **Lesson:** SQLite stores timestamps as TEXT. EF 10 will not translate `DateTimeOffset` `OrderBy` into SQL.
+- **Action / convention:** Filter in SQL, then sort the materialized list in memory.
+- **Related files/tasks/ADRs:** TASK-010, `AccountStore.cs`, `TransactionStore.cs`
+
+---

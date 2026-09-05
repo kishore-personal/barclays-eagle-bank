@@ -798,3 +798,25 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 18:08 — barclays-implement-and-test (stretch TASK-010–012, TASK-014)
+
+- **User intent:** Implement remaining stretch: list, PATCH, DELETE, and Docker.
+- **Agent actions actually performed:**
+  - Added new list/update/delete handlers (create/get handlers left as-is). Account delete removes transactions first; user delete is `409` while accounts remain.
+  - Added Reqnroll scenarios for the new operations.
+  - Added `Dockerfile` + `compose.yaml`; JWT required via env (no default secret).
+  - Documented Docker and marked all OpenAPI operations as wired.
+- **Decisions / outcomes:**
+  - TASK-010, TASK-011, TASK-012, TASK-014 marked `DONE`. All approved tasks are `DONE`.
+  - SQLite LINQ `OrderBy(DateTimeOffset)` is not supported; lists sort in memory (LESSON-014).
+- **Files changed:**
+  - Application/Infrastructure/Api list, PATCH, DELETE files and controllers
+  - `tests/EagleBank.Tests` features and steps
+  - `Dockerfile`, `compose.yaml`, `.dockerignore`
+  - `README.md`, `openapi.yaml`, `tasks/tasks.md`, `lessons.md`
+- **Verification actually run:** `dotnet test EagleBank.sln --nologo` — 170 passed, 0 failed. `docker compose up --build -d` then `GET /health` and `GET /swagger/index.html` both `200`. `docker compose down`.
+- **Workflow transition:** implement-and-test `IN_PROGRESS` → `COMPLETE`
+- **Approval state:** implementing approved stretch tasks on request
+
+---
+

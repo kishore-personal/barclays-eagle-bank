@@ -80,4 +80,19 @@ public sealed class BankAccount
         UpdatedTimestamp = transaction.CreatedTimestamp;
         Transactions.Add(transaction);
     }
+
+    public void ApplyPartialUpdate(string? name, string? accountType, DateTimeOffset updatedTimestamp)
+    {
+        if (name is not null)
+        {
+            Name = name;
+        }
+
+        if (accountType is not null)
+        {
+            AccountType = accountType;
+        }
+
+        UpdatedTimestamp = updatedTimestamp;
+    }
 }

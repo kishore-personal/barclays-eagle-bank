@@ -91,6 +91,76 @@ public sealed class AccountSteps
         await GetAsync($"/v1/accounts/{accountNumber}");
     }
 
+    [When("I list my accounts")]
+    public async Task WhenIListMyAccounts()
+    {
+        await GetAsync("/v1/accounts");
+    }
+
+    [When("I patch the created account with name {string}")]
+    public async Task WhenIPatchTheCreatedAccountWithName(string name)
+    {
+        await PatchAsync($"/v1/accounts/{_scenarioContext.Get<string>("CreatedAccountNumber")}", new { name });
+    }
+
+    [When(@"I patch account {string} with name {string}")]
+    public async Task WhenIPatchAccountWithName(string accountNumber, string name)
+    {
+        await PatchAsync($"/v1/accounts/{accountNumber}", new { name });
+    }
+
+    [When("I patch the other user's account with name {string}")]
+    public async Task WhenIPatchTheOtherUsersAccountWithName(string name)
+    {
+        await PatchAsync($"/v1/accounts/{_scenarioContext.Get<string>("OtherAccountNumber")}", new { name });
+    }
+
+    [When("I delete the created account")]
+    public async Task WhenIDeleteTheCreatedAccount()
+    {
+        await DeleteAsync($"/v1/accounts/{_scenarioContext.Get<string>("CreatedAccountNumber")}");
+    }
+
+    [When(@"I delete account {string}")]
+    public async Task WhenIDeleteAccount(string accountNumber)
+    {
+        await DeleteAsync($"/v1/accounts/{accountNumber}");
+    }
+
+    [When("I delete the other user's account")]
+    public async Task WhenIDeleteTheOtherUsersAccount()
+    {
+        await DeleteAsync($"/v1/accounts/{_scenarioContext.Get<string>("OtherAccountNumber")}");
+    }
+
+    [Then("the response is a list of the caller's accounts")]
+    public void ThenTheResponseIsAListOfTheCallersAccounts()
+    {
+        using var document = JsonDocument.Parse(Body);
+        var accounts = document.RootElement.GetProperty("accounts");
+        Assert.True(accounts.GetArrayLength() >= 1);
+        var created = _scenarioContext.Get<string>("CreatedAccountNumber");
+        Assert.Contains(accounts.EnumerateArray(), account => account.GetProperty("accountNumber").GetString() == created);
+    }
+
+    [Then("the other user's account is not in the list")]
+    public void ThenTheOtherUsersAccountIsNotInTheList()
+    {
+        using var document = JsonDocument.Parse(Body);
+        var other = _scenarioContext.Get<string>("OtherAccountNumber");
+        Assert.DoesNotContain(
+            document.RootElement.GetProperty("accounts").EnumerateArray(),
+            account => account.GetProperty("accountNumber").GetString() == other);
+    }
+
+    [Then("the account name is {string}")]
+    public void ThenTheAccountNameIs(string name)
+    {
+        using var document = JsonDocument.Parse(Body);
+        Assert.Equal(name, document.RootElement.GetProperty("name").GetString());
+        Assert.Equal(BankAccount.FixedSortCode, document.RootElement.GetProperty("sortCode").GetString());
+    }
+
     [Then("the response is a BankAccountResponse")]
     public void ThenTheResponseIsABankAccountResponse()
     {
@@ -136,6 +206,18 @@ public sealed class AccountSteps
     private async Task GetAsync(string path)
     {
         var response = await Client.GetAsync(path);
+        StoreResponse(response, await response.Content.ReadAsStringAsync());
+    }
+
+    private async Task PatchAsync(string path, object body)
+    {
+        var response = await Client.PatchAsync(path, UserFixtures.JsonBody(body));
+        StoreResponse(response, await response.Content.ReadAsStringAsync());
+    }
+
+    private async Task DeleteAsync(string path)
+    {
+        var response = await Client.DeleteAsync(path);
         StoreResponse(response, await response.Content.ReadAsStringAsync());
     }
 

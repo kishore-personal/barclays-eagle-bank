@@ -56,6 +56,17 @@ rm -f src/EagleBank.Api/data/eagle-bank.db src/EagleBank.Api/data/eagle-bank.db-
 
 The next `dotnet run` recreates an empty schema.
 
+### Docker
+
+JWT must be supplied. There is no default secret in the image or Compose file.
+
+```bash
+export Jwt__SigningKey='replace-with-a-long-random-secret-key'
+docker compose up --build
+```
+
+Then `GET http://localhost:5080/health`. Stop with `Ctrl+C` or `docker compose down`.
+
 ## Authenticate
 
 Create-user and login are public. Every other `/v1` route requires `Authorization: Bearer <jwt>`.
@@ -104,23 +115,23 @@ Then `POST /v1/accounts` with `{ "name", "accountType": "personal" }`, and depos
 
 ## What is implemented
 
-The submitted `openapi.yaml` describes the full original contract. Only the operations below are wired. List, PATCH, and DELETE return `404`/`405` if called. Swagger UI shows the same split at the top of the page.
+The submitted `openapi.yaml` operations are wired, including list, PATCH, and DELETE.
 
-| Method | Path | Wired |
+| Method | Path | Behaviour |
 |---|---|---|
-| POST | `/v1/users` | Yes — public create |
-| GET | `/v1/users/{userId}` | Yes — own user (`403` / `404`) |
-| PATCH | `/v1/users/{userId}` | No |
-| DELETE | `/v1/users/{userId}` | No |
-| POST | `/v1/auth/login` | Yes — `{ "token" }` |
-| POST | `/v1/accounts` | Yes |
-| GET | `/v1/accounts` | No |
-| GET | `/v1/accounts/{accountNumber}` | Yes (`^01\d{6}$`) |
-| PATCH | `/v1/accounts/{accountNumber}` | No |
-| DELETE | `/v1/accounts/{accountNumber}` | No |
-| POST | `/v1/accounts/{accountNumber}/transactions` | Yes — deposit and withdrawal |
-| GET | `/v1/accounts/{accountNumber}/transactions` | No |
-| GET | `/v1/accounts/{accountNumber}/transactions/{transactionId}` | Yes |
+| POST | `/v1/users` | Public create |
+| GET | `/v1/users/{userId}` | Own user (`403` / `404`) |
+| PATCH | `/v1/users/{userId}` | Partial update; `updatedTimestamp` changes |
+| DELETE | `/v1/users/{userId}` | `204` if no accounts; `409` if any remain |
+| POST | `/v1/auth/login` | `{ "token" }` |
+| POST | `/v1/accounts` | Create personal GBP account |
+| GET | `/v1/accounts` | Caller's accounts only (`200` / `401`) |
+| GET | `/v1/accounts/{accountNumber}` | Own account (`^01\d{6}$`) |
+| PATCH | `/v1/accounts/{accountNumber}` | `name` and/or `accountType` |
+| DELETE | `/v1/accounts/{accountNumber}` | `204`; transactions are removed |
+| POST | `/v1/accounts/{accountNumber}/transactions` | Deposit and withdrawal |
+| GET | `/v1/accounts/{accountNumber}/transactions` | Owner's transactions |
+| GET | `/v1/accounts/{accountNumber}/transactions/{transactionId}` | Fetch one |
 
 Deposit over `10000.00` or a withdrawal with insufficient funds returns `422`. Money is GBP, two decimals, persisted as integer pence. Errors use the OpenAPI bodies (`400` includes `details`).
 
