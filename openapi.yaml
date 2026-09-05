@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Take home tech task
+  title: Eagle Bank API
   version: v1.0.0
   description: |-
     REST API for Eagle Bank. Callers create a user (with password), authenticate at POST /v1/auth/login, then create, fetch, update and delete a bank account and deposit or withdraw money. Transactions are stored against a bank account and can be retrieved but not modified or deleted.
