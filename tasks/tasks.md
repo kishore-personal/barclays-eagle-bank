@@ -230,7 +230,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
 ## TASK-004 — Create user and login
 
 - **Priority:** MUST
-- **Status:** TODO
+- **Status:** DONE
 - **Objective:** Public signup with password and `POST /v1/auth/login` returning `{ "token" }`.
 - **Requirement references:** REQ-USER-001–005, REQ-USER-014, REQ-USER-015, REQ-AUTH-001–005, REQ-ERR-001
 - **Design / ADR references:** ADR-0005, ADR-0008, ADR-0013, ADR-0014, DQ-001, DQ-002; design sections 7 and 13
@@ -250,7 +250,7 @@ Required by ADR-0015. This repo is a public POC / take-home. **No commercial, RP
   - **Gherkin `Features/Auth.feature`:** login with valid credentials → 200 `{ token }`; malformed body → 400; unknown email → 401; wrong password → 401
   - **Then** (Gherkin or xUnit): user response has no password; log sink has no email/password/phone/address/token
 - **Verification / definition of done:** `dotnet test` runs those scenarios and they pass.
-- **Verification evidence:** Not run
+- **Verification evidence:** 2026-09-05 — `dotnet test EagleBank.sln` — 44 passed, 0 failed (Users.feature + Auth.feature plus prior unit/schema tests). Reqnroll `/` in unused shared Then steps had to be escaped as `\/` (Cucumber alternatives).
 
 ---
 

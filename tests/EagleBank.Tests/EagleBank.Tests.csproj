@@ -26,4 +26,10 @@
     <ProjectReference Include="..\..\src\EagleBank.Api\EagleBank.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Features\**\*.feature">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -4,9 +4,15 @@ public static class LogDenylist
 {
     public static readonly string[] Values =
     [
-        "password",
         "passwordHash",
         "Authorization",
-        "Bearer "
+        "Bearer ",
+        UserFixtures.Email,
+        UserFixtures.Phone,
+        UserFixtures.Password,
+        UserFixtures.Line1,
+        UserFixtures.Name,
+        "unknown@example.com",
+        "eyJ"
     ];
 }

@@ -105,3 +105,13 @@ Do not use this file as a diary. Capture lessons that could help another enginee
 - **Related files/tasks/ADRs:** TASK-003, ADR-0002, ADR-0003
 
 ---
+
+### LESSON-010 — Reqnroll treats `/` as Cucumber alternatives
+
+- **Date:** 2026-09-05
+- **Context:** Shared Then text `UserResponse / BankAccountResponse / …` made the entire binding registry invalid, so every Gherkin scenario failed before a request ran.
+- **Lesson:** In Cucumber expressions, `/` is an alternative separator. An unused step attribute still breaks all features.
+- **Action / convention:** Escape literal slashes as `\/`, or write one Then per payload type.
+- **Related files/tasks/ADRs:** TASK-004, ADR-0013
+
+---

@@ -43,16 +43,6 @@ public sealed class HttpSteps
         _scenarioContext.Set(balance, "ExpectedBalance");
     }
 
-    [When("I create a user with all the required data")]
-    public void WhenICreateAUserWithAllTheRequiredData()
-    {
-    }
-
-    [When("I create a user with missing required data")]
-    public void WhenICreateAUserWithMissingRequiredData()
-    {
-    }
-
     [When("I send a {word} request to {string}")]
     public async Task WhenISendARequestTo(string method, string path)
     {
@@ -68,13 +58,13 @@ public sealed class HttpSteps
         Assert.Equal(statusCode, (int)_scenarioContext.Get<HttpResponseMessage>().StatusCode);
     }
 
-    [Then("the response is a UserResponse / BankAccountResponse / TransactionResponse / token payload")]
+    [Then("the response is a UserResponse \\/ BankAccountResponse \\/ TransactionResponse \\/ token payload")]
     public void ThenTheResponseIsASuccessPayload()
     {
         Assert.False(string.IsNullOrWhiteSpace(_scenarioContext.Get<string>("ResponseBody")));
     }
 
-    [Then("the response is an ErrorResponse / BadRequestErrorResponse")]
+    [Then("the response is an ErrorResponse \\/ BadRequestErrorResponse")]
     public void ThenTheResponseIsAnErrorPayload()
     {
         var body = _scenarioContext.Get<string>("ResponseBody");

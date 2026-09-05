@@ -11,7 +11,46 @@ tags:
     description: Manage transactions on a bank account
   - name: user
     description: Manage a user
+  - name: auth
+    description: Authenticate a user
 paths:
+  /v1/auth/login:
+    post:
+      tags:
+        - auth
+      description: Exchange email and password for a JWT
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authentication succeeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: The request body was malformed or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unknown email or incorrect password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /v1/accounts:
     post:
       tags:
@@ -783,7 +822,12 @@ components:
         - address
         - phoneNumber
         - email
+        - password
       properties:
+        password:
+          type: string
+          minLength: 8
+          writeOnly: true
         name:
           type: string
           examples:
@@ -847,6 +891,24 @@ components:
         email:
           type: string
           format: email
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    LoginResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
     UserResponse:
       type: object
       required:

@@ -572,3 +572,28 @@ Because the repository may be public, do **not** store secrets, credentials, per
 
 ---
 
+### 2026-09-05 13:53 — barclays-implement-and-test (TASK-004)
+
+- **User intent:** Continue one approved task at a time; finish create-user and login.
+- **Agent actions actually performed:**
+  - Completed `POST /v1/users` (public, password required) and `POST /v1/auth/login` returning `{ token }`.
+  - Duplicate email maps to 400 with details; unknown email and wrong password share 401.
+  - Password hashing and JWT issue stay behind Application ports; OpenAPI includes password and login.
+  - Added `Features/Users.feature` and `Features/Auth.feature`; escaped unused shared Then `/` so Reqnroll bindings load.
+- **Decisions / outcomes:**
+  - TASK-004 marked `DONE`. TASK-005 not started (one-task increment).
+- **Files changed:**
+  - `src/EagleBank.Api` (Users/Auth controllers)
+  - `src/EagleBank.Application` (CreateUser, Login, ports)
+  - `src/EagleBank.Infrastructure` (UserStore, hasher, JWT issuer)
+  - `tests/EagleBank.Tests` (features, steps, factory)
+  - `openapi.yaml`
+  - `tasks/tasks.md`
+  - `lessons.md`
+  - `agent-interactions.md`
+- **Verification actually run:** `dotnet test EagleBank.sln` — 44 passed, 0 failed.
+- **Workflow transition:** none; implement-and-test remains `IN_PROGRESS`
+- **Approval state:** implementing approved tasks only
+
+---
+

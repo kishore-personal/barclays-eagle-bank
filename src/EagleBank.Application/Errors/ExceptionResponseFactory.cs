@@ -13,6 +13,7 @@ public sealed class ExceptionResponseFactory : IExceptionResponseFactory
         return exception switch
         {
             ValidationException validation => MapValidation(validation),
+            UnauthorizedException e => MapSafe(401, e),
             NotFoundException e => MapSafe(404, e),
             ForbiddenException e => MapSafe(403, e),
             ConflictException e => MapSafe(409, e),

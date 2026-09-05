@@ -20,6 +20,16 @@ public class ExceptionResponseFactoryTests
     }
 
     [Fact]
+    public void Unauthorized_maps_to_401_error_response()
+    {
+        var mapped = _factory.Create(new UnauthorizedException());
+
+        Assert.Equal(401, mapped.StatusCode);
+        var body = Assert.IsType<ErrorResponse>(mapped.Body);
+        Assert.Equal("Invalid credentials.", body.Message);
+    }
+
+    [Fact]
     public void Forbidden_maps_to_403_error_response()
     {
         var mapped = _factory.Create(new ForbiddenException());

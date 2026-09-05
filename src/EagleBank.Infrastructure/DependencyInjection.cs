@@ -1,3 +1,5 @@
+using EagleBank.Application.Abstractions;
+using EagleBank.Infrastructure.Identity;
 using EagleBank.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -15,12 +17,17 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("EagleBank")
             ?? "Data Source=data/eagle-bank.db";
 
+        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
         services.AddDbContext<EagleBankDbContext>(options =>
         {
             options.UseSqlite(connectionString);
             options.ConfigureWarnings(warnings =>
                 warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         });
+        services.AddScoped<IUserStore, UserStore>();
+        services.AddSingleton<IPasswordHasher, AspNetPasswordHasher>();
+        services.AddSingleton<IUserIdFactory, UserIdFactory>();
+        services.AddSingleton<IJwtTokenIssuer, JwtTokenIssuer>();
         return services;
     }
 }
