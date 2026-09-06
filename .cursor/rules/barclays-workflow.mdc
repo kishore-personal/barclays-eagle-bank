@@ -1,0 +1,82 @@
+---
+description: Enforces the gated Barclays take-home engineering workflow.
+globs:
+alwaysApply: true
+---
+
+# Barclays Take-Home Workflow Rule
+
+This repository uses a mandatory gated workflow. The agent must not skip stages.
+
+## Required order
+
+1. `barclays-init`
+2. `barclays-plan`
+3. User approval of plan
+4. `barclays-design`
+5. User approval of design
+6. `barclays-tasks`
+7. User approval of tasks
+8. `barclays-implement-and-test`
+
+## Source of truth
+
+Read `.barclays/workflow-state.md` before doing stage-dependent work.
+
+Valid stage statuses are:
+- `NOT_STARTED`
+- `IN_PROGRESS`
+- `AWAITING_APPROVAL`
+- `APPROVED`
+- `COMPLETE`
+- `BLOCKED`
+
+`barclays-init` is considered complete when its required repository files exist and the state file says `COMPLETE`.
+
+## Hard gates
+
+- Do not run planning work before init is complete.
+- Do not run design work unless plan is `APPROVED`.
+- Do not create implementation tasks unless design is `APPROVED`.
+- Do not implement production code unless tasks are `APPROVED`.
+- Do not infer approval from silence, continued conversation, or a new request.
+- Only mark a stage `APPROVED` after the user explicitly approves that stage in chat.
+- Never approve your own work.
+
+## Behaviour by stage
+
+### Planning
+Focus on WHAT must be built: scope, functional requirements, API behaviour, validation, security assumptions, non-functional requirements, acceptance criteria, and delivery constraints. Avoid implementation code.
+
+### Design
+Focus on HOW the approved requirements will be satisfied. Discuss material trade-offs with the user before finalising decisions. Record significant decisions as ADRs.
+
+### Tasks
+Decompose the approved design into small, testable, ordered work items. Do not implement them.
+
+### Implementation and testing
+Implement only approved tasks, preferably one coherent task at a time. Run relevant tests and builds. Never claim a command, test, build, or validation passed unless it was actually executed successfully in the current working environment.
+
+## Repository memory and audit trail
+
+Before substantial work, read when present:
+- `lessons.md`
+- `adrs.md`
+- `agent-interactions.md`
+- relevant approved requirements/design/tasks
+
+Append concise, factual entries to `agent-interactions.md` for meaningful user/agent decisions and stage transitions. Because this repository may be public:
+- do not store secrets, credentials, tokens, personal data, or irrelevant chat content;
+- prefer a concise sanitised summary of the interaction rather than a verbatim transcript;
+- never fabricate an interaction or approval.
+
+Update `lessons.md` when a reusable engineering lesson is learned.
+
+Update `adrs.md` whenever an ADR is created, superseded, or rejected.
+
+## Integrity
+
+- Do not disguise AI-assisted work as human-only work.
+- Do not fabricate commits, timestamps, test results, code review comments, or user approvals.
+- Keep generated documentation consistent with the actual repository state.
+- If repository state conflicts with documentation, flag the conflict and correct the documentation or state before continuing.
