@@ -1,0 +1,25 @@
+BARCLAYS CURSOR SKILLS PACKAGE
+==============================
+
+Cursor skills (inside hidden .cursor directory):
+- .cursor/skills/barclays-init/SKILL.md
+- .cursor/skills/barclays-plan/SKILL.md
+- .cursor/skills/barclays-design/SKILL.md
+- .cursor/skills/barclays-tasks/SKILL.md
+- .cursor/skills/barclays-implement-and-test/SKILL.md
+
+Workflow rule:
+- .cursor/rules/barclays-workflow.mdc
+
+Templates:
+- templates/workflow-state.md
+- templates/agent-interactions.md
+- templates/lessons.md
+- templates/adrs.md
+- templates/adr-template.md
+- templates/technical-requirements-template.md
+- templates/system-design-template.md
+- templates/tasks-template.md
+
+macOS note:
+Folders beginning with a dot are hidden in Finder. Press Command + Shift + . to show/hide hidden files.
